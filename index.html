@@ -1005,9 +1005,9 @@ let cityHP=[3,3,3,3,3];
 // ============ TOWER CONFIGS ============
 const TC={
   iron_dome: {name:'כיפת ברזל',cost:80, range:140,color:'#00d4ff',fr:52,sp:4.5,icon:'🔵',dmg:['rocket','micro']},
-  david_sling:{name:'קלע דוד',  cost:220,range:200,color:'#00ff6e',fr:82,sp:6.2,icon:'🟢',dmg:['rocket','micro','cruise','emp_missile']},
+  david_sling:{name:'קלע דוד',  cost:220,range:200,color:'#00ff6e',fr:58,sp:8.5,icon:'🟢',dmg:['rocket','micro','cruise','emp_missile'],cruiseDmg:2},
   laser:     {name:'לייזר',    cost:300,range:155,color:'#bb33ff',fr:16,sp:999, icon:'🟣',dmg:['drone','suicide_drone'],laser:true},
-  arrow3:    {name:'חץ',       cost:440,range:280,color:'#ffd900',fr:108,sp:8.2,icon:'🟡',dmg:['ballistic','hypersonic','cluster','ballistic_heavy']},
+  arrow3:    {name:'חץ',       cost:440,range:280,color:'#ffd900',fr:72,sp:9.5,icon:'🟡',dmg:['ballistic','hypersonic','cluster','ballistic_heavy'],heavyDmg:3},
   iaf_drone: {name:'מזל"ט פרדי',cost:900,range:260,color:'#ffaa00',fr:65,sp:7.5,icon:'🛸',dmg:['rocket','drone','cruise','ballistic','micro','cluster','hypersonic','emp_missile','suicide_drone','ballistic_heavy'],isDrone:true,maxHP:8,patrol:true},
 };
 
@@ -1243,7 +1243,9 @@ function updInters(){
     if(!m.target||m.target.intercepted||m.target.y>H){inters.splice(i,1);continue;}
     const dx=m.target.x-m.x,dy=m.target.y-m.y,d=Math.sqrt(dx*dx+dy*dy);
     if(d<13){
-      m.target.hp--;
+      const dmg=(m.tower&&m.tower.cfg.heavyDmg&&m.target.type==='ballistic_heavy')?m.tower.cfg.heavyDmg
+               :(m.tower&&m.tower.cfg.cruiseDmg&&m.target.type==='cruise')?m.tower.cfg.cruiseDmg:1;
+      m.target.hp-=dmg;
       if(m.target.hp<=0){killProj(m.target);G.intercepted++;if(G.currentWaveStats) G.currentWaveStats.intercepted++;G.score+=m.target.cfg.reward;const cashReward=Math.ceil(m.target.cfg.reward*0.4);G.money+=cashReward;updMoney();}
       else spawnExp(m.target.x,m.target.y,m.color,.6);
       inters.splice(i,1);
@@ -1529,15 +1531,16 @@ function render(){
     ctx.strokeStyle=`rgba(255,217,0,${nukeEff.alpha*.85})`;ctx.lineWidth=5;ctx.stroke();
   }
   // Shield visuals handled per-city in drawGround()
-  // Tower ranges
-  for(const t of towers)if(t.showRange){
+  // Tower ranges — תמיד גלוי במובייל, hover בדסקטופ
+  const isMobile=window.innerWidth<=600;
+  for(const t of towers)if(isMobile||t.showRange){
     ctx.beginPath();ctx.arc(t.x,t.y,t.range,0,Math.PI*2);
-    ctx.strokeStyle=t.cfg.color+'20';ctx.lineWidth=1;ctx.setLineDash([3,6]);ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle=t.cfg.color+(isMobile?'30':'20');ctx.lineWidth=isMobile?1.2:1;ctx.setLineDash([3,6]);ctx.stroke();ctx.setLineDash([]);
   }
   // Drone ranges
-  for(const d of iafDrones)if(d.showRange){
+  for(const d of iafDrones)if(isMobile||d.showRange){
     ctx.beginPath();ctx.arc(d.x,d.y,d.range,0,Math.PI*2);
-    ctx.strokeStyle='#ffaa0020';ctx.lineWidth=1;ctx.setLineDash([3,6]);ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='#ffaa00'+(isMobile?'30':'20');ctx.lineWidth=isMobile?1.2:1;ctx.setLineDash([3,6]);ctx.stroke();ctx.setLineDash([]);
   }
   for(const t of towers) drawTower(t);
   for(const d of iafDrones) drawDrone(d);
@@ -1837,6 +1840,16 @@ cv.addEventListener('touchend',e=>{
   const x=(e.changedTouches[0].clientX-r.left)*scaleX;
   const y=(e.changedTouches[0].clientY-r.top)*scaleY;
   placeTower(x,y);
+  // נקה preview אחרי הנחה
+  setTimeout(()=>{pvX=0;pvY=0;},80);
+},{passive:false});
+
+cv.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const r=cv.getBoundingClientRect();
+  const scaleX=W/r.width,scaleY=H/r.height;
+  pvX=(e.touches[0].clientX-r.left)*scaleX;
+  pvY=(e.touches[0].clientY-r.top)*scaleY;
 },{passive:false});
 
 document.querySelectorAll('.di').forEach(b=>b.addEventListener('click',()=>{
