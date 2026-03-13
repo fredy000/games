@@ -273,34 +273,36 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4px 10px
 }
 
 #helpBtn{
-position:fixed;
-bottom:36px;
-right:8px;
-width:28px;
-height:28px;
-border:1px solid rgba(0,212,255,0.4);
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-color:rgba(0,212,255,0.55);
-font-weight:bold;
-cursor:pointer;
-z-index:1000;
-background:rgba(2,5,7,0.85);
-font-family:Orbitron;
-font-size:13px;
-transition:all .2s;
+  position:fixed;
+  bottom:44px;
+  left:10px;
+  width:30px;
+  height:30px;
+  border:1.5px solid rgba(0,212,255,0.5);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(0,212,255,0.7);
+  font-weight:700;
+  cursor:pointer;
+  z-index:1000;
+  background:rgba(2,5,7,0.9);
+  font-family:'Heebo',sans-serif;
+  font-size:15px;
+  line-height:1;
+  transition:all .2s;
+  box-shadow:0 0 8px rgba(0,212,255,0.15);
 }
 #helpBtn:hover{
-border-color:#00d4ff;
-color:#00d4ff;
-background:#020507;
+  border-color:#00d4ff;
+  color:#00d4ff;
+  box-shadow:0 0 14px rgba(0,212,255,0.35);
+  background:#020507;
 }
 @media(max-width:600px){
-  #helpBtn{bottom:84px;right:6px;width:26px;height:26px;font-size:12px;}
+  #helpBtn{bottom:calc(82px + env(safe-area-inset-bottom));left:8px;width:28px;height:28px;font-size:14px;}
   #mob-hud{display:block !important;}
-  /* hide main header on mobile — info is in mob-hud */
   header{display:none !important;}
 }
 
@@ -440,36 +442,34 @@ color:#020507;
     <h2>🛡 מדריך — Iron Dome Protocol</h2>
 
     <h3>🎯 המטרה</h3>
-    <p>הגן על 5 ערים ישראליות מפני גלים של טילים, כטב"מים ואיומים מתקדמים. כל טיל שפוגע בעיר מוריד חיים. 5 פגיעות — המשחק נגמר.</p>
+    <p style="color:#8abacc;font-size:14px;line-height:1.7;">הגן על 5 ערים מפני גלים של טילים וכטב"מים. כל פגיעה בעיר מוריד לב. 5 פגיעות — נגמר.</p>
 
     <div class="divider"></div>
-    <h3>🏗 מערכות הגנה — מה לבחור?</h3>
+    <h3>🏗 מערכות הגנה</h3>
 
-    <div class="hrow"><div class="ico">🔵</div><div class="htxt"><strong>כיפת ברזל — $80</strong><span>הכי זול וזמין. מיירט רקטות, כטב"מים ומיקרו. הצב הרבה ממנו בשכבת ההגנה הראשונה.</span></div></div>
-    <div class="hrow"><div class="ico">🟢</div><div class="htxt"><strong>קלע דוד — $220</strong><span>מיירט טילים בליסטיים וקרוז שכיפת ברזל לא מצליחה. חיוני מגל 5 ומעלה.</span></div></div>
-    <div class="hrow"><div class="ico">🟣</div><div class="htxt"><strong>לייזר — $300</strong><span>מפצח כטב"מים בלבד — מיידי וחסר תחמושת. מצוין נגד נחילים וכטב"מים מתאבדים.</span></div></div>
-    <div class="hrow"><div class="ico">🟡</div><div class="htxt"><strong>חץ — $420</strong><span>הגנה עמוקה. טווח ענק. מיירט היפרסוני, ראשים מפוצלים ובליסטי כבד. שים אחד מרכזי.</span></div></div>
-    <div class="hrow"><div class="ico">🟠</div><div class="htxt"><strong>פלנקס — $260</strong><span>תותח מהיר שיורט כמעט הכל. אש מהירה = מצוין נגד גלי מטח ורקטות מרובות.</span></div></div>
-    <div class="hrow"><div class="ico">🛸</div><div class="htxt"><strong>מזל"ט פרדי — $900</strong><span>מטוס ישראלי עם טווח עצום — יורט הכל! אך ניתן להפלה. שמור עליו. שווה כל שקל.</span></div></div>
+    <div class="hrow"><div class="ico">🔵</div><div class="htxt"><strong>כיפת ברזל — $80</strong><span>מיירט רקטות ומיקרו. הכי זול — קנה 3-4 ממנו בהתחלה לכיסוי בסיסי.</span></div></div>
+    <div class="hrow"><div class="ico">🟢</div><div class="htxt"><strong>קלע דוד — $220</strong><span>מיירט בליסטיים וקרוז. חיוני מגל 5. שים אחד לפחות בצד כל עיר.</span></div></div>
+    <div class="hrow"><div class="ico">🟣</div><div class="htxt"><strong>לייזר — $300</strong><span>מיירט כטב"מים בלבד — אבל עושה זאת מיידית וחסר תחמושת. חובה נגד נחילים.</span></div></div>
+    <div class="hrow"><div class="ico">🟡</div><div class="htxt"><strong>חץ — $420</strong><span>טווח הכי גדול. יורט היפרסוני, ראשים מפוצלים ובליסטי כבד. מגדל אחד מרכזי שווה זהב.</span></div></div>
+    <div class="hrow"><div class="ico">🛸</div><div class="htxt"><strong>מזל"ט פרדי — $900</strong><span>יורט הכל! נע אוטומטית מעל המפה. ניתן להפלה — אל תשים אותו בחזית הטילים.</span></div></div>
 
     <div class="divider"></div>
-    <h3>⚡ יכולות מיוחדות — מתי להשתמש?</h3>
+    <h3>⚡ יכולות מיוחדות</h3>
 
-    <div class="hrow"><div class="ico">⚡</div><div class="htxt"><strong>EMP פולס — $220</strong><span>מנטרל מיידית את כל הטילים בשמיים. חסוך למצבי חירום — מטח גדול, גל בוס.</span></div></div>
-    <div class="hrow"><div class="ico">✈️</div><div class="htxt"><strong>תקיפה אווירית — $320</strong><span>מטוס שמפציץ שטח רחב. עדיף להשתמש כשיש הרבה טילים צמודים זה לזה.</span></div></div>
-    <div class="hrow"><div class="ico">🔧</div><div class="htxt"><strong>שיקום עיר — $400</strong><span>מחזיר חיים! השתמש מוקדם כשעיר נפגעת — אל תחכה לרגע האחרון.</span></div></div>
-    <div class="hrow"><div class="ico">🛡</div><div class="htxt"><strong>מגן אנרגיה — $550</strong><span>חומת אנרגיה שחוסמת כל טיל שמגיע לקרקע למשך 6 שניות. מציל חיים בגלי מצור.</span></div></div>
-    <div class="hrow"><div class="ico">☢️</div><div class="htxt"><strong>מכה גרעינית — $750</strong><span>מנקה את כל השמיים בבת אחת. שמור לגל בוס או למתקפת פתע קריטית.</span></div></div>
-    <div class="hrow"><div class="ico">🇺🇸</div><div class="htxt"><strong>סיוע ארה"ב — $1800</strong><span>3 מפציצי F-35 + מזומן + ריפוי עיר + מחיקת טילים. ה"אולטימייט" — תשמור לשעת אמת.</span></div></div>
+    <div class="hrow"><div class="ico">⚡</div><div class="htxt"><strong>זרם חשמל — $220</strong><span>מנטרל את כל הטילים בשמיים כרגע. שמור למטח גדול או כשמגדלים מוצפים.</span></div></div>
+    <div class="hrow"><div class="ico">🔧</div><div class="htxt"><strong>שיקום עיר — $400</strong><span>מחזיר לב! תמיד כדאי — גם כשהכל תקין מוסיף לב ומחזיר כסף.</span></div></div>
+    <div class="hrow"><div class="ico">🛡</div><div class="htxt"><strong>מגן הערים — $550</strong><span>כיפה כחולה שחוסמת את כל הטילים ל-2 גלים שלמים. הכי שווה לכסף.</span></div></div>
+    <div class="hrow"><div class="ico">☢️</div><div class="htxt"><strong>מכה גרעינית — $750</strong><span>הורסת כל טיל שמנסה לפגוע ב-2 גלים. שמור לגל בוס — תהרוג הכל אוטומטית.</span></div></div>
 
     <div class="divider"></div>
     <h3>💡 טיפים לניצחון</h3>
     <div class="tip-box">
-      <b>📍 מיקום:</b> פזר מגדלים על פני כל המפה — אל תצבור הכל במרכז.<br>
-      <b>💰 כלכלה:</b> כל יירוט מכניס כסף! השקע בהגנה מוקדם, אל תחכה לגל קשה.<br>
-      <b>🔄 שכבות:</b> שלב סוגים שונים — כיפת ברזל + קלע דוד + חץ = כיסוי מלא.<br>
-      <b>⚠ מתקפות פתע:</b> הן קורות בלי אזהרה — תמיד שמור EMP או מגן ביד.<br>
-      <b>🎯 גל בוס:</b> כל 8 גלים — הכן יכולת חזקה מראש לפני שהוא מגיע.
+      <b>🏆 הקומבו הכי חזק:</b> כיפת ברזל × 3 + קלע דוד + חץ אחד מרכזי = מחסום בלתי עביר לגל 1-8.<br><br>
+      <b>📍 מיקום חכם:</b> הצב מגדלים ב-3 שורות — שורה קדמית (גבוהה), אמצע, ועל הערים. כך כל טיל נפגש בשלושה מגדלים.<br><br>
+      <b>⏳ בין הגלים = זמן זהב:</b> יש לך 3 שניות בין כל גל — זה הזמן לבנות, לא לחכות לבאג.<br><br>
+      <b>⚡ EMP vs מגן:</b> EMP מנקה פעם אחת; מגן מגן 2 גלים שלמים — כשאתה לחוץ, מגן > EMP.<br><br>
+      <b>🛸 פרדי הוא לא קידמי:</b> שים אותו בעורף המפה — הוא יורה לכל מקום בטווח ולא ייפגע מטילים שמגיעים מלמעלה.<br><br>
+      <b>☢️ גל בוס:</b> כשרואים "💀 גל בוס" — הפעל מגן הערים מיד. הוא חוסם הכל אוטומטית בלי לבזבז EMP.
     </div>
 
     <button class="close-btn" onclick="toggleHelp()">✕ סגור</button>
