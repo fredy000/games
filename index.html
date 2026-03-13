@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Iron Dome Protocol</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Heebo:wght@300;400;600;700&display=swap');
@@ -15,7 +15,10 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{width:100%;height:100%;overflow:hidden;touch-action:none;}
-body{background:var(--bg);color:var(--white);font-family:'Share Tech Mono',monospace;display:flex;flex-direction:column;height:100vh;height:100dvh;}
+body{background:var(--bg);color:var(--white);font-family:'Heebo',sans-serif;display:flex;flex-direction:column;height:100vh;height:100dvh;
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999;}
 
 /* HEADER */
@@ -24,14 +27,14 @@ header{background:linear-gradient(180deg,#061020,var(--bg2));border-bottom:2px s
 .logo em{color:var(--white);font-style:normal;}
 .hstats{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 .hs{text-align:center;min-width:56px;}
-.hsl{font-size:clamp(9px,1.4vw,11px);color:var(--dim);letter-spacing:1px;}
-.hsv{font-family:'Orbitron',monospace;font-size:clamp(16px,2.2vw,20px);font-weight:700;}
+.hsl{font-size:clamp(11px,1.4vw,13px);color:var(--dim);letter-spacing:1px;font-family:'Heebo',sans-serif;}
+.hsv{font-family:'Orbitron',monospace;font-size:clamp(17px,2.2vw,21px);font-weight:700;}
 .hsv.m{color:var(--green);text-shadow:0 0 7px var(--green);}
 .hsv.l{color:var(--red);text-shadow:0 0 7px var(--red);}
 .hsv.s{color:var(--yellow);text-shadow:0 0 7px var(--yellow);}
 .hsv.w{color:var(--blue);text-shadow:0 0 7px var(--blue);}
-.pbadge{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.22);border-radius:3px;padding:3px 9px;font-size:clamp(11px,1.6vw,13px);color:var(--blue);white-space:nowrap;}
-.abar{font-size:clamp(10px,1.4vw,12px);color:var(--red);animation:blink .7s infinite;letter-spacing:1px;white-space:nowrap;text-align:center;}
+.pbadge{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.22);border-radius:3px;padding:3px 9px;font-size:clamp(12px,1.6vw,14px);color:var(--blue);white-space:nowrap;font-family:'Heebo',sans-serif;}
+.abar{font-size:clamp(12px,1.4vw,14px);color:var(--red);animation:blink .7s infinite;letter-spacing:1px;white-space:nowrap;text-align:center;font-family:'Heebo',sans-serif;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* LAYOUT */
@@ -39,17 +42,17 @@ header{background:linear-gradient(180deg,#061020,var(--bg2));border-bottom:2px s
 .panel{background:var(--panel);border:1px solid var(--border);padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;width:var(--panel-w);flex-shrink:0;}
 .panel::-webkit-scrollbar{width:3px;}
 .panel::-webkit-scrollbar-thumb{background:var(--border);}
-.pt{font-family:'Orbitron',monospace;font-size:clamp(10px,1.3vw,12px);letter-spacing:2px;color:var(--blue);border-bottom:1px solid var(--border);padding-bottom:5px;padding-left:70px;text-transform:uppercase;}
+.pt{font-family:'Heebo',sans-serif;font-size:clamp(12px,1.3vw,14px);font-weight:700;letter-spacing:1px;color:var(--blue);border-bottom:1px solid var(--border);padding-bottom:5px;padding-left:70px;text-transform:uppercase;}
 
 /* DEFENSE ITEMS */
 .di{background:linear-gradient(135deg,rgba(0,90,140,.07),rgba(0,212,255,.03));border:1px solid var(--border);border-radius:3px;padding:8px 8px 18px 8px;cursor:pointer;transition:all .14s;position:relative;-webkit-user-select:none;user-select:none;}
 .di:active,.di:hover{border-color:var(--blue);background:linear-gradient(135deg,rgba(0,90,140,.2),rgba(0,212,255,.1));box-shadow:0 0 10px rgba(0,212,255,.15);}
 .di.sel{border-color:var(--blue);background:linear-gradient(135deg,rgba(0,90,140,.3),rgba(0,212,255,.15));box-shadow:0 0 14px rgba(0,212,255,.28);}
 .di.destroyed{opacity:.35;border-color:var(--red)!important;cursor:not-allowed;}
-.dn{font-family:'Orbitron',monospace;font-size:clamp(11px,1.4vw,13px);color:var(--blue);margin-bottom:3px;}
-.dd{font-size:clamp(10px,1.1vw,11px);color:var(--dim);line-height:1.4;font-family:'Heebo',sans-serif;}
-.dc{position:absolute;top:6px;left:6px;font-size:clamp(10px,1.2vw,12px);color:var(--green);font-weight:bold;}
-.dr{font-size:clamp(9px,1.1vw,11px);color:var(--orange);margin-top:3px;}
+.dn{font-family:'Heebo',sans-serif;font-size:clamp(13px,1.4vw,15px);font-weight:700;color:var(--blue);margin-bottom:3px;}
+.dd{font-size:clamp(12px,1.1vw,13px);color:var(--dim);line-height:1.5;font-family:'Heebo',sans-serif;}
+.dc{position:absolute;top:6px;left:6px;font-size:clamp(12px,1.2vw,13px);color:var(--green);font-weight:bold;font-family:'Heebo',sans-serif;}
+.dr{font-size:clamp(11px,1.1vw,12px);color:var(--orange);margin-top:3px;font-family:'Heebo',sans-serif;}
 .dk{position:absolute;bottom:4px;left:6px;font-size:clamp(15px,2vw,17px);color:rgba(0,212,255,.35);font-family:'Orbitron',monospace;}
 
 /* DRONE ITEM special */
@@ -65,10 +68,10 @@ header{background:linear-gradient(180deg,#061020,var(--bg2));border-bottom:2px s
 .ab.us-ab:active:not(:disabled),.ab.us-ab:hover:not(:disabled){border-color:var(--gold);background:rgba(255,170,0,.09);box-shadow:0 0 10px rgba(255,170,0,.2);}
 .ai{font-size:clamp(18px,2.2vw,22px);}
 .an2{flex:1;min-width:0;}
-.anm{font-size:clamp(10px,1.3vw,12px);color:var(--orange);font-family:'Orbitron',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.anm{font-size:clamp(12px,1.3vw,13px);color:var(--orange);font-family:'Heebo',sans-serif;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ab.us-ab .anm{color:var(--gold);}
-.acd{font-size:clamp(9px,1.1vw,11px);color:var(--dim);}
-.acs{font-size:clamp(9px,1.1vw,11px);color:var(--green);}
+.acd{font-size:clamp(11px,1.1vw,12px);color:var(--dim);font-family:'Heebo',sans-serif;}
+.acs{font-size:clamp(11px,1.1vw,12px);color:var(--green);font-family:'Heebo',sans-serif;}
 .cdb{height:3px;background:rgba(255,255,255,.07);border-radius:1px;margin-top:3px;overflow:hidden;}
 .cdf{height:100%;background:var(--orange);border-radius:1px;transition:width .1s;box-shadow:0 0 3px var(--orange);}
 .ab.us-ab .cdf{background:var(--gold);box-shadow:0 0 4px var(--gold);}
@@ -79,7 +82,7 @@ canvas{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none;}
 
 /* THREAT LOG */
 .tlog{display:flex;flex-direction:column;gap:3px;max-height:150px;overflow:hidden;}
-.te{font-size:clamp(10px,1.2vw,11px);padding:3px 6px;border-radius:2px;border-left:2px solid;animation:sli .2s ease;line-height:1.4;}
+.te{font-size:clamp(12px,1.2vw,13px);padding:3px 6px;border-radius:2px;border-left:2px solid;animation:sli .2s ease;line-height:1.5;font-family:'Heebo',sans-serif;}
 @keyframes sli{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
 .te.low{border-color:var(--green);background:rgba(0,255,110,.05);color:var(--green);}
 .te.med{border-color:var(--yellow);background:rgba(255,217,0,.05);color:var(--yellow);}
@@ -103,19 +106,19 @@ canvas{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none;}
 .slot.on{border-color:var(--green);background:rgba(0,255,110,.07);}
 .slot.dis{border-color:var(--red);background:rgba(255,26,26,.07);}
 .sli2{font-size:14px;}
-.sls{color:var(--dim);font-size:16px;letter-spacing:0px;margin-top:1px;}
+.sls{color:var(--dim);font-size:12px;font-family:'Heebo',sans-serif;letter-spacing:0px;margin-top:1px;}
 .slot.on .sls{color:var(--green);}
 .slot.dis .sls{color:var(--red);}
 
 /* STATS */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
 .sb{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:2px;padding:6px;text-align:center;}
-.sbl{font-size:clamp(9px,1.2vw,11px);color:var(--dim);letter-spacing:1px;}
-.sbv{font-family:'Orbitron',monospace;font-size:clamp(14px,1.8vw,18px);}
+.sbl{font-size:clamp(12px,1.2vw,13px);color:var(--dim);letter-spacing:1px;font-family:'Heebo',sans-serif;}
+.sbv{font-family:'Orbitron',monospace;font-size:clamp(15px,1.8vw,19px);}
 .sbv.g{color:var(--green)}.sbv.r{color:var(--red)}.sbv.y{color:var(--yellow)}.sbv.b{color:var(--blue)}
 
 /* FOOTER */
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:4px 10px;display:flex;align-items:center;justify-content:space-between;font-size:clamp(10px,1.3vw,12px);color:var(--dim);flex-shrink:0;}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:4px 10px;display:flex;align-items:center;justify-content:space-between;font-size:clamp(12px,1.3vw,13px);color:var(--dim);font-family:'Heebo',sans-serif;flex-shrink:0;}
 
 /* FLASH */
 #flash{position:absolute;inset:0;background:rgba(255,0,0,0);pointer-events:none;z-index:50;transition:background .1s;}
@@ -128,25 +131,25 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4px 10px
 /* NAME SCREEN */
 .nlogo{font-family:'Orbitron',monospace;font-size:clamp(22px,6vw,36px);font-weight:900;color:var(--blue);text-shadow:0 0 36px var(--blue),0 0 70px rgba(0,212,255,.3);letter-spacing:4px;text-align:center;animation:glow 2s ease-in-out infinite alternate;}
 @keyframes glow{from{text-shadow:0 0 36px var(--blue);}to{text-shadow:0 0 55px var(--blue),0 0 90px rgba(0,212,255,.5);}}
-.nsub{font-family:'Heebo',sans-serif;font-size:clamp(10px,2vw,13px);color:var(--dim);letter-spacing:3px;text-align:center;}
+.nsub{font-family:'Heebo',sans-serif;font-size:clamp(12px,2vw,14px);color:var(--dim);letter-spacing:2px;text-align:center;}
 .ndiv{width:min(260px,80vw);height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 .ni{background:transparent;border:none;border-bottom:2px solid var(--blue);color:var(--blue);font-family:'Orbitron',monospace;font-size:clamp(16px,4vw,20px);text-align:center;width:min(220px,75vw);padding:5px 0;outline:none;letter-spacing:3px;}
 .ni::placeholder{color:rgba(0,212,255,.22);}
-.btn{background:transparent;border:2px solid var(--blue);color:var(--blue);font-family:'Orbitron',monospace;font-size:clamp(10px,2.5vw,12px);letter-spacing:3px;padding:10px clamp(20px,5vw,32px);cursor:pointer;transition:all .25s;box-shadow:0 0 14px rgba(0,212,255,.1);-webkit-user-select:none;user-select:none;}
+.btn{background:transparent;border:2px solid var(--blue);color:var(--blue);font-family:'Heebo',sans-serif;font-size:clamp(13px,2.5vw,15px);font-weight:700;letter-spacing:2px;padding:10px clamp(20px,5vw,32px);cursor:pointer;transition:all .25s;box-shadow:0 0 14px rgba(0,212,255,.1);-webkit-user-select:none;user-select:none;}
 .btn:active,.btn:hover{background:var(--blue);color:var(--bg);box-shadow:0 0 30px rgba(0,212,255,.4);transform:scale(1.03);}
 .btn.yw{border-color:var(--yellow);color:var(--yellow);}
 .btn.yw:active,.btn.yw:hover{background:var(--yellow);color:var(--bg);box-shadow:0 0 28px rgba(255,217,0,.4);}
 .howto{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(480px,92vw);}
 .hi{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);border-radius:4px;padding:8px;text-align:center;}
-.hii{font-size:clamp(16px,4vw,20px);margin-bottom:3px;}
-.hit{font-family:'Orbitron',monospace;font-size:clamp(14px,2vw,16px);color:var(--blue);letter-spacing:2px;margin-bottom:2px;}
-.hid{font-family:'Heebo',sans-serif;font-size:clamp(8px,2vw,9px);color:var(--dim);line-height:1.4;}
+.hii{font-size:clamp(18px,4vw,22px);margin-bottom:3px;}
+.hit{font-family:'Heebo',sans-serif;font-size:clamp(13px,2vw,15px);font-weight:700;color:var(--blue);letter-spacing:1px;margin-bottom:3px;}
+.hid{font-family:'Heebo',sans-serif;font-size:clamp(11px,2vw,12px);color:var(--dim);line-height:1.5;}
 
 /* LEADERBOARD */
 .lbw{width:min(500px,94vw);}
 .lbt{font-family:'Orbitron',monospace;font-size:clamp(20px,3.5vw,26px);color:var(--yellow);text-shadow:0 0 16px var(--yellow);letter-spacing:3px;text-align:center;margin-bottom:5px;}
-.lbs{font-size:clamp(11px,1.6vw,13px);color:var(--dim);text-align:center;letter-spacing:2px;margin-bottom:12px;}
-.lbh{display:grid;grid-template-columns:36px 1fr 80px 60px 64px;gap:5px;font-size:clamp(10px,1.3vw,12px);color:var(--dim);letter-spacing:1px;padding:0 7px;margin-bottom:5px;}
+.lbs{font-size:clamp(13px,1.6vw,15px);color:var(--dim);text-align:center;letter-spacing:1px;margin-bottom:12px;font-family:'Heebo',sans-serif;}
+.lbh{display:grid;grid-template-columns:36px 1fr 80px 60px 64px;gap:5px;font-size:clamp(12px,1.3vw,13px);color:var(--dim);letter-spacing:1px;padding:0 7px;margin-bottom:5px;font-family:'Heebo',sans-serif;}
 .lbl{display:flex;flex-direction:column;gap:4px;max-height:min(320px,55vh);overflow-y:auto;}
 .lbl::-webkit-scrollbar{width:3px;}
 .lbl::-webkit-scrollbar-thumb{background:var(--border);}
@@ -156,44 +159,44 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4px 10px
 .lbr.t3{border-color:#bb6600;background:rgba(160,80,0,.05);}
 .lbr.me{border-color:var(--blue);background:rgba(0,212,255,.06);animation:lbp 1.4s ease infinite;}
 @keyframes lbp{0%,100%{box-shadow:0 0 0 rgba(0,212,255,0)}50%{box-shadow:0 0 10px rgba(0,212,255,.28)}}
-.lbrk{font-family:'Orbitron',monospace;font-size:clamp(13px,2vw,16px);text-align:center;}
+.lbrk{font-family:'Orbitron',monospace;font-size:clamp(14px,2vw,17px);text-align:center;}
 .lbrk.r1{color:var(--yellow)}.lbrk.r2{color:#ccc}.lbrk.r3{color:#bb6600}
-.lbnm{font-family:'Orbitron',monospace;font-size:clamp(12px,1.6vw,14px);}
-.lbsc{font-family:'Orbitron',monospace;font-size:clamp(12px,1.6vw,14px);color:var(--green);}
-.lbwv{font-size:clamp(11px,1.4vw,13px);color:var(--blue);}
-.lbdt{font-size:clamp(9px,1.2vw,11px);color:var(--dim);}
-.lbempty{text-align:center;color:var(--dim);font-size:clamp(13px,2vw,15px);padding:24px;font-family:'Heebo',sans-serif;}
+.lbnm{font-family:'Heebo',sans-serif;font-size:clamp(13px,1.6vw,15px);font-weight:600;}
+.lbsc{font-family:'Orbitron',monospace;font-size:clamp(13px,1.6vw,15px);color:var(--green);}
+.lbwv{font-size:clamp(12px,1.4vw,14px);color:var(--blue);font-family:'Heebo',sans-serif;}
+.lbdt{font-size:clamp(11px,1.2vw,12px);color:var(--dim);font-family:'Heebo',sans-serif;}
+.lbempty{text-align:center;color:var(--dim);font-size:clamp(14px,2vw,16px);padding:24px;font-family:'Heebo',sans-serif;}
 
 /* RECORD BANNER */
-#rec-banner{position:absolute;top:0;left:0;right:0;background:linear-gradient(90deg,transparent,rgba(255,217,0,.16),transparent);border-bottom:1px solid var(--yellow);padding:9px;text-align:center;font-family:'Orbitron',monospace;font-size:clamp(14px,2.2vw,17px);color:var(--yellow);text-shadow:0 0 12px var(--yellow);letter-spacing:2px;transform:translateY(-100%);transition:transform .4s ease;z-index:100;}
+#rec-banner{position:absolute;top:0;left:0;right:0;background:linear-gradient(90deg,transparent,rgba(255,217,0,.16),transparent);border-bottom:1px solid var(--yellow);padding:9px;text-align:center;font-family:'Heebo',sans-serif;font-weight:700;font-size:clamp(14px,2.2vw,17px);color:var(--yellow);text-shadow:0 0 12px var(--yellow);letter-spacing:1px;transform:translateY(-100%);transition:transform .4s ease;z-index:100;}
 #rec-banner.show{transform:translateY(0);}
 
 /* ATTACK BANNER */
-#atk-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(255,26,26,.12);border:2px solid var(--red);border-radius:6px;padding:16px 32px;text-align:center;font-family:'Orbitron',monospace;z-index:80;pointer-events:none;transition:transform .2s ease,opacity .3s;opacity:0;}
+#atk-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(255,26,26,.12);border:2px solid var(--red);border-radius:6px;padding:16px 32px;text-align:center;font-family:'Heebo',sans-serif;z-index:80;pointer-events:none;transition:transform .2s ease,opacity .3s;opacity:0;}
 #atk-banner.show{transform:translate(-50%,-50%) scale(1);opacity:1;}
-#atk-title{font-size:clamp(16px,2.5vw,22px);color:var(--red);text-shadow:0 0 12px var(--red);letter-spacing:2px;margin-bottom:5px;}
-#atk-sub{font-size:clamp(12px,1.8vw,14px);color:rgba(255,100,100,.9);}
+#atk-title{font-size:clamp(17px,2.5vw,23px);font-weight:700;color:var(--red);text-shadow:0 0 12px var(--red);letter-spacing:1px;margin-bottom:5px;}
+#atk-sub{font-size:clamp(13px,1.8vw,15px);color:rgba(255,100,100,.9);}
 
 /* US AID BANNER */
-#us-banner{position:absolute;top:20%;left:50%;transform:translateX(-50%) scale(0);background:rgba(0,50,120,.3);border:2px solid var(--gold);border-radius:6px;padding:14px 28px;text-align:center;font-family:'Orbitron',monospace;z-index:81;pointer-events:none;opacity:0;transition:transform .25s ease,opacity .3s;}
+#us-banner{position:absolute;top:20%;left:50%;transform:translateX(-50%) scale(0);background:rgba(0,50,120,.3);border:2px solid var(--gold);border-radius:6px;padding:14px 28px;text-align:center;font-family:'Heebo',sans-serif;z-index:81;pointer-events:none;opacity:0;transition:transform .25s ease,opacity .3s;}
 #us-banner.show{transform:translateX(-50%) scale(1);opacity:1;}
 
 /* GAME OVER */
 .got{font-family:'Orbitron',monospace;font-size:clamp(26px,4.5vw,36px);font-weight:900;letter-spacing:3px;text-align:center;}
-.gos{font-family:'Heebo',sans-serif;font-size:clamp(14px,2.2vw,16px);color:var(--dim);text-align:center;}
+.gos{font-family:'Heebo',sans-serif;font-size:clamp(15px,2.2vw,17px);color:var(--dim);text-align:center;}
 .gosc{font-family:'Orbitron',monospace;font-size:clamp(18px,3vw,22px);color:var(--yellow);text-shadow:0 0 14px var(--yellow);}
 .gog{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(360px,88vw);}
 .gobox{background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:2px;padding:9px;text-align:center;}
-.gobl{font-size:clamp(10px,1.3vw,12px);color:var(--dim);letter-spacing:1px;}
-.gobv{font-family:'Orbitron',monospace;font-size:clamp(15px,2.2vw,18px);margin-top:3px;}
-.rank-badge{background:rgba(255,217,0,.1);border:1px solid var(--yellow);border-radius:3px;padding:7px 18px;font-family:'Orbitron',monospace;font-size:clamp(12px,1.8vw,14px);color:var(--yellow);}
+.gobl{font-size:clamp(12px,1.3vw,13px);color:var(--dim);letter-spacing:0px;font-family:'Heebo',sans-serif;}
+.gobv{font-family:'Orbitron',monospace;font-size:clamp(16px,2.2vw,19px);margin-top:3px;}
+.rank-badge{background:rgba(255,217,0,.1);border:1px solid var(--yellow);border-radius:3px;padding:7px 18px;font-family:'Heebo',sans-serif;font-weight:700;font-size:clamp(13px,1.8vw,15px);color:var(--yellow);}
 
 /* MINI MAP */
 .mm{background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:2px;height:66px;overflow:hidden;}
 
 /* MOBILE TOUCH CONTROLS */
 #mobile-controls{display:none;position:absolute;bottom:0;left:0;right:0;background:rgba(3,6,10,.92);border-top:1px solid var(--border);padding:7px 8px;z-index:60;gap:5px;flex-wrap:wrap;justify-content:center;}
-.mob-btn{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.25);border-radius:4px;padding:9px 7px;font-family:'Orbitron',monospace;font-size:12px;color:var(--blue);cursor:pointer;text-align:center;min-width:54px;flex:1;max-width:72px;-webkit-user-select:none;user-select:none;}
+.mob-btn{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.25);border-radius:4px;padding:9px 7px;font-family:'Heebo',sans-serif;font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;text-align:center;min-width:54px;flex:1;max-width:72px;-webkit-user-select:none;user-select:none;}
 .mob-btn.sel{border-color:var(--blue);background:rgba(0,212,255,.18);}
 .mob-btn.ab-mob{border-color:rgba(255,115,0,.25);color:var(--orange);background:rgba(255,115,0,.06);}
 .mob-btn.ab-mob:disabled{opacity:.25;}
@@ -235,9 +238,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4px 10px
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
     padding:6px 6px;
+    padding-bottom:calc(6px + env(safe-area-inset-bottom));
     gap:5px;
     bottom:0;
-    height:76px;
+    height:calc(76px + env(safe-area-inset-bottom));
     align-items:stretch;
   }
   #mobile-controls::-webkit-scrollbar{ display:none; }
@@ -303,33 +307,126 @@ background:#020507;
 #helpBox{
 position:fixed;
 inset:0;
-background:rgba(2,5,7,0.92);
+background:rgba(2,5,7,0.95);
 display:none;
 align-items:center;
 justify-content:center;
 z-index:999;
+overflow-y:auto;
+padding:16px;
 }
 
 .helpCard{
 background:#07131f;
 border:2px solid #00d4ff;
-padding:32px;
-border-radius:12px;
-max-width:600px;
+padding:28px 32px 32px;
+border-radius:14px;
+max-width:640px;
+width:100%;
 color:#d8eeff;
-font-family:Heebo;
-line-height:1.8;
+font-family:'Heebo',sans-serif;
+font-size:15px;
+line-height:1.85;
 text-align:right;
+direction:rtl;
+box-shadow:0 0 40px rgba(0,212,255,0.15);
 }
 
-.helpCard button{
-margin-top:20px;
-padding:8px 18px;
-background:#00d4ff;
-border:none;
+.helpCard h2{
+font-family:'Orbitron',monospace;
+font-size:20px;
+color:#00d4ff;
+text-shadow:0 0 14px #00d4ff;
+letter-spacing:2px;
+margin-bottom:18px;
+text-align:center;
+}
+
+.helpCard h3{
+font-family:'Heebo',sans-serif;
+font-size:15px;
+font-weight:700;
+color:#00d4ff;
+margin:18px 0 8px;
+border-right:3px solid #00d4ff;
+padding-right:8px;
+}
+
+.helpCard .hrow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin-bottom:7px;
+background:rgba(0,212,255,0.04);
 border-radius:6px;
-font-weight:bold;
+padding:7px 10px;
+}
+
+.helpCard .hrow .ico{
+font-size:20px;
+flex-shrink:0;
+margin-top:1px;
+}
+
+.helpCard .hrow .htxt{
+flex:1;
+}
+
+.helpCard .hrow .htxt strong{
+color:#00ffcc;
+font-size:14px;
+display:block;
+margin-bottom:2px;
+}
+
+.helpCard .hrow .htxt span{
+color:#8abacc;
+font-size:13px;
+line-height:1.6;
+}
+
+.helpCard .tip-box{
+background:rgba(255,217,0,0.06);
+border:1px solid rgba(255,217,0,0.25);
+border-radius:8px;
+padding:10px 14px;
+margin-top:14px;
+font-size:13.5px;
+color:#ffe066;
+line-height:1.7;
+}
+
+.helpCard .tip-box b{
+color:#ffd900;
+font-size:14px;
+}
+
+.helpCard .divider{
+height:1px;
+background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent);
+margin:16px 0;
+}
+
+.helpCard .close-btn{
+margin-top:22px;
+padding:10px 28px;
+background:transparent;
+border:2px solid #00d4ff;
+border-radius:7px;
+color:#00d4ff;
+font-family:'Orbitron',monospace;
+font-size:12px;
+font-weight:700;
+letter-spacing:2px;
 cursor:pointer;
+display:block;
+width:100%;
+transition:all .2s;
+}
+
+.helpCard .close-btn:hover{
+background:#00d4ff;
+color:#020507;
 }
 
 </style>
@@ -340,18 +437,42 @@ cursor:pointer;
 
 <div id="helpBox">
   <div class="helpCard">
-    <h2>הסבר על המשחק</h2>
-    המטרה שלך היא להגן על הערים מפני טילים וכטמ״מים.<br><br>
-    הצב מערכות הגנה על המפה:
-    <br>• כיפת ברזל – נגד רקטות קצרות
-    <br>• קלע דוד – נגד טילים בינוניים
-    <br>• חץ – נגד טילים ארוכי טווח
-    <br>• לייזר / פלנקס – יירוט מהיר
-    <br>• מזל"ט פרדי – סיוע אווירי אך ניתן להפלה
-    <br><br>
-    ככל שהגלים עולים – האיומים נהיים קשים יותר.
-    <br><br>
-    <button onclick="toggleHelp()">סגור</button>
+    <h2>🛡 מדריך — Iron Dome Protocol</h2>
+
+    <h3>🎯 המטרה</h3>
+    <p>הגן על 5 ערים ישראליות מפני גלים של טילים, כטב"מים ואיומים מתקדמים. כל טיל שפוגע בעיר מוריד חיים. 5 פגיעות — המשחק נגמר.</p>
+
+    <div class="divider"></div>
+    <h3>🏗 מערכות הגנה — מה לבחור?</h3>
+
+    <div class="hrow"><div class="ico">🔵</div><div class="htxt"><strong>כיפת ברזל — $80</strong><span>הכי זול וזמין. מיירט רקטות, כטב"מים ומיקרו. הצב הרבה ממנו בשכבת ההגנה הראשונה.</span></div></div>
+    <div class="hrow"><div class="ico">🟢</div><div class="htxt"><strong>קלע דוד — $220</strong><span>מיירט טילים בליסטיים וקרוז שכיפת ברזל לא מצליחה. חיוני מגל 5 ומעלה.</span></div></div>
+    <div class="hrow"><div class="ico">🟣</div><div class="htxt"><strong>לייזר — $300</strong><span>מפצח כטב"מים בלבד — מיידי וחסר תחמושת. מצוין נגד נחילים וכטב"מים מתאבדים.</span></div></div>
+    <div class="hrow"><div class="ico">🟡</div><div class="htxt"><strong>חץ — $420</strong><span>הגנה עמוקה. טווח ענק. מיירט היפרסוני, ראשים מפוצלים ובליסטי כבד. שים אחד מרכזי.</span></div></div>
+    <div class="hrow"><div class="ico">🟠</div><div class="htxt"><strong>פלנקס — $260</strong><span>תותח מהיר שיורט כמעט הכל. אש מהירה = מצוין נגד גלי מטח ורקטות מרובות.</span></div></div>
+    <div class="hrow"><div class="ico">🛸</div><div class="htxt"><strong>מזל"ט פרדי — $900</strong><span>מטוס ישראלי עם טווח עצום — יורט הכל! אך ניתן להפלה. שמור עליו. שווה כל שקל.</span></div></div>
+
+    <div class="divider"></div>
+    <h3>⚡ יכולות מיוחדות — מתי להשתמש?</h3>
+
+    <div class="hrow"><div class="ico">⚡</div><div class="htxt"><strong>EMP פולס — $220</strong><span>מנטרל מיידית את כל הטילים בשמיים. חסוך למצבי חירום — מטח גדול, גל בוס.</span></div></div>
+    <div class="hrow"><div class="ico">✈️</div><div class="htxt"><strong>תקיפה אווירית — $320</strong><span>מטוס שמפציץ שטח רחב. עדיף להשתמש כשיש הרבה טילים צמודים זה לזה.</span></div></div>
+    <div class="hrow"><div class="ico">🔧</div><div class="htxt"><strong>שיקום עיר — $400</strong><span>מחזיר חיים! השתמש מוקדם כשעיר נפגעת — אל תחכה לרגע האחרון.</span></div></div>
+    <div class="hrow"><div class="ico">🛡</div><div class="htxt"><strong>מגן אנרגיה — $550</strong><span>חומת אנרגיה שחוסמת כל טיל שמגיע לקרקע למשך 6 שניות. מציל חיים בגלי מצור.</span></div></div>
+    <div class="hrow"><div class="ico">☢️</div><div class="htxt"><strong>מכה גרעינית — $750</strong><span>מנקה את כל השמיים בבת אחת. שמור לגל בוס או למתקפת פתע קריטית.</span></div></div>
+    <div class="hrow"><div class="ico">🇺🇸</div><div class="htxt"><strong>סיוע ארה"ב — $1800</strong><span>3 מפציצי F-35 + מזומן + ריפוי עיר + מחיקת טילים. ה"אולטימייט" — תשמור לשעת אמת.</span></div></div>
+
+    <div class="divider"></div>
+    <h3>💡 טיפים לניצחון</h3>
+    <div class="tip-box">
+      <b>📍 מיקום:</b> פזר מגדלים על פני כל המפה — אל תצבור הכל במרכז.<br>
+      <b>💰 כלכלה:</b> כל יירוט מכניס כסף! השקע בהגנה מוקדם, אל תחכה לגל קשה.<br>
+      <b>🔄 שכבות:</b> שלב סוגים שונים — כיפת ברזל + קלע דוד + חץ = כיסוי מלא.<br>
+      <b>⚠ מתקפות פתע:</b> הן קורות בלי אזהרה — תמיד שמור EMP או מגן ביד.<br>
+      <b>🎯 גל בוס:</b> כל 8 גלים — הכן יכולת חזקה מראש לפני שהוא מגיע.
+    </div>
+
+    <button class="close-btn" onclick="toggleHelp()">✕ סגור</button>
   </div>
 </div>
 
@@ -379,55 +500,38 @@ cursor:pointer;
   <div class="pt">🛡 מגנים</div>
   <div class="di sel" data-type="iron_dome" id="btn-iron_dome">
     <div class="dc">$80</div><div class="dn">כיפת ברזל</div>
-    <div class="dd">רקטות קצרות. מהיר.</div>
-
+    <div class="dd">הורס טילים קטנים.</div>
   </div>
   <div class="di" data-type="david_sling" id="btn-david_sling">
     <div class="dc">$220</div><div class="dn">קלע דוד</div>
-    <div class="dd">בליסטיים וקרוז.</div>
-
+    <div class="dd">הורס טילים קצרים ובינוניים.</div>
   </div>
   <div class="di" data-type="laser" id="btn-laser">
     <div class="dc">$300</div><div class="dn">לייזר</div>
-    <div class="dd">כטב"מים בלבד. מיידי.</div>
-
+    <div class="dd">הורס רק כטמ"מים.</div>
   </div>
   <div class="di" data-type="arrow3" id="btn-arrow3">
-    <div class="dc">$420</div><div class="dn">חץ</div>
-    <div class="dd">הגנה עמוקה, טווח מקסימלי.</div>
-
-  </div>
-  <div class="di" data-type="phalanx" id="btn-phalanx">
-    <div class="dc">$260</div><div class="dn">פלנקס</div>
-    <div class="dd">תותח מהיר לכל סוגים.</div>
-
+    <div class="dc">$440</div><div class="dn">חץ</div>
+    <div class="dd">הורס טילים גדולים.</div>
   </div>
   <!-- DRONE UNIT -->
   <div class="di drone-item" data-type="iaf_drone" id="btn-iaf_drone">
     <div class="dc">$900</div><div class="dn">מזל"ט פרדי</div>
-    <div class="dd">מטוס ישראלי. קנה ולחץ לפרוס. ניתן להרס!</div>
-
+    <div class="dd">הורס הכל. ניתן להרס!</div>
   </div>
 
   <div style="border-top:1px solid var(--border);padding-top:6px;"><div class="pt">⚡ יכולות</div></div>
   <button class="ab" id="btn-emp" onclick="useAb('emp')">
-    <span class="ai">⚡</span><div class="an2"><div class="anm">EMP פולס</div><div class="acs">$220</div><div class="acd" id="cd-emp">מוכן</div><div class="cdb"><div class="cdf" id="cdb-emp" style="width:100%"></div></div></div>
-  </button>
-  <button class="ab" id="btn-airstrike" onclick="useAb('airstrike')">
-    <span class="ai">✈️</span><div class="an2"><div class="anm">תקיפה אווירית</div><div class="acs">$320</div><div class="acd" id="cd-airstrike">מוכן</div><div class="cdb"><div class="cdf" id="cdb-airstrike" style="width:100%"></div></div></div>
+    <span class="ai">⚡</span><div class="an2"><div class="anm">זרם חשמל</div><div class="acs">$220</div><div class="acd" id="cd-emp">מוכן</div><div class="cdb"><div class="cdf" id="cdb-emp" style="width:100%"></div></div></div>
   </button>
   <button class="ab" id="btn-repair" onclick="useAb('repair')">
     <span class="ai">🔧</span><div class="an2"><div class="anm">שיקום עיר</div><div class="acs">$400</div><div class="acd" id="cd-repair">מוכן</div><div class="cdb"><div class="cdf" id="cdb-repair" style="width:100%"></div></div></div>
   </button>
+  <button class="ab" id="btn-shield" onclick="useAb('shield')">
+    <span class="ai">🛡</span><div class="an2"><div class="anm">מגן הערים</div><div class="acs">$550</div><div class="acd" id="cd-shield">מוכן</div><div class="cdb"><div class="cdf" id="cdb-shield" style="width:100%"></div></div></div>
+  </button>
   <button class="ab" id="btn-nuke" onclick="useAb('nuke')">
     <span class="ai">☢️</span><div class="an2"><div class="anm">מכה גרעינית</div><div class="acs">$750</div><div class="acd" id="cd-nuke">מוכן</div><div class="cdb"><div class="cdf" id="cdb-nuke" style="width:100%"></div></div></div>
-  </button>
-  <button class="ab" id="btn-shield" onclick="useAb('shield')">
-    <span class="ai">🛡</span><div class="an2"><div class="anm">מגן אנרגיה</div><div class="acs">$550</div><div class="acd" id="cd-shield">מוכן</div><div class="cdb"><div class="cdf" id="cdb-shield" style="width:100%"></div></div></div>
-  </button>
-  <!-- US AID -->
-  <button class="ab us-ab" id="btn-us_aid" onclick="useAb('us_aid')">
-    <span class="ai">🇺🇸</span><div class="an2"><div class="anm">סיוע ארה"ב</div><div class="acs">$1800</div><div class="acd" id="cd-us_aid">מוכן</div><div class="cdb"><div class="cdf" id="cdb-us_aid" style="width:100%"></div></div></div>
   </button>
 </div>
 
@@ -508,17 +612,14 @@ cursor:pointer;
 <div id="mobile-controls">
     <div class="mob-btn sel" data-type="iron_dome" onclick="mobSel(this,'iron_dome')">🔵<br>כיפה<br><span class="mob-price">$80</span></div>
     <div class="mob-btn" data-type="david_sling" onclick="mobSel(this,'david_sling')">🟢<br>קלע<br><span class="mob-price">$220</span></div>
-    <div class="mob-btn" data-type="phalanx" onclick="mobSel(this,'phalanx')">🟠<br>פלנקס<br><span class="mob-price">$260</span></div>
     <div class="mob-btn" data-type="laser" onclick="mobSel(this,'laser')">🟣<br>לייזר<br><span class="mob-price">$300</span></div>
-    <div class="mob-btn" data-type="arrow3" onclick="mobSel(this,'arrow3')">🟡<br>חץ<br><span class="mob-price">$420</span></div>
+    <div class="mob-btn" data-type="arrow3" onclick="mobSel(this,'arrow3')">🟡<br>חץ<br><span class="mob-price">$440</span></div>
     <div class="mob-btn" data-type="iaf_drone" onclick="mobSel(this,'iaf_drone')">🛸<br>פרדי<br><span class="mob-price">$900</span></div>
     <div style="width:1px;background:rgba(0,212,255,.2);flex-shrink:0;margin:4px 2px;align-self:stretch;"></div>
-    <button class="mob-btn ab-mob" id="mob-emp" onclick="useAb('emp')">⚡<br>EMP<br><span class="mob-price">$220</span></button>
-    <button class="mob-btn ab-mob" id="mob-airstrike" onclick="useAb('airstrike')">✈️<br>אוויר<br><span class="mob-price">$320</span></button>
+    <button class="mob-btn ab-mob" id="mob-emp" onclick="useAb('emp')">⚡<br>זרם<br><span class="mob-price">$220</span></button>
     <button class="mob-btn ab-mob" id="mob-repair" onclick="useAb('repair')">🔧<br>שיקום<br><span class="mob-price">$400</span></button>
     <button class="mob-btn ab-mob" id="mob-shield" onclick="useAb('shield')">🛡<br>מגן<br><span class="mob-price">$550</span></button>
     <button class="mob-btn ab-mob" id="mob-nuke" onclick="useAb('nuke')">☢️<br>גרעין<br><span class="mob-price">$750</span></button>
-    <button class="mob-btn ab-mob" id="mob-us" onclick="useAb('us_aid')">🇺🇸<br>ארה"ב<br><span class="mob-price">$1800</span></button>
   </div>
 </div>
 
@@ -698,10 +799,13 @@ const mc=document.getElementById('mc'),mctx=mc.getContext('2d');
 let W,H;
 function resize(){
   const a=document.getElementById('ga');
-  W=cv.width=a.clientWidth;
-  H=cv.height=a.clientHeight;
+  const w=a.clientWidth, h=a.clientHeight;
+  if(w>0 && h>0){ W=cv.width=w; H=cv.height=h; }
 }
 window.addEventListener('resize',()=>{resize();initCities();});
+// Force resize on DOM ready to ensure correct dimensions
+document.addEventListener('DOMContentLoaded',()=>{ resize(); });
+window.addEventListener('load',()=>{ resize(); });
 
 // ============================================================
 // AI COMMANDER — מערכת קושי חכמה ואינסופית
@@ -715,191 +819,161 @@ window.addEventListener('resize',()=>{resize();initCities();});
 // הגל נבנה לפי ה-skill + קצת שונות אקראית + תבנית גל.
 // ============================================================
 
+// ============================================================
+// מערכת קושי קבועה — מבוססת גל בלבד
+// גלים 1-5:  קל — רקטות בסיסיות, מעט טילים
+// גלים 5-10: מאתגר — סוגים חדשים, יותר טילים
+// גל 10, 20, 30...: בוס — גל מיוחד כבד
+// גל 15+:    טילים גם מהצדדים, עוצמה עולה בכל גל
+// ============================================================
+
 const AI = {
-  // --- ניקוד מיומנות שחקן (0=מתחיל, 1=מאסטר) ---
-  skill: 0.1,
+  skill: 0.1, // נשמר לתאימות עם קוד קיים — לא משמש לקושי
 
-  // --- היסטוריה לחישוב מגמה ---
-  history: [], // {acc, lives, money, wave}
+  history: [],
+  streak: 0,
+  hitStreak: 0,
 
-  // --- מקדמי תגובה ---
-  LEARN_RATE_UP:   0.07,  // כמה מהר להכביד כשהשחקן מצטיין
-  LEARN_RATE_DOWN: 0.12,  // כמה מהר להקל כשהשחקן נלחץ
-  SKILL_FLOOR:     0.04,  // מינימום — תמיד יהיו טילים
-  SKILL_CEIL:      0.97,  // מקסימום — תמיד ניתן לשרוד (תיאורטית)
-
-  // --- ניקוד מצטבר (לדפוס משחק) ---
-  streak: 0,       // רצף גלים ללא פגיעה
-  hitStreak: 0,    // רצף גלים עם הרבה פגיעות
-
-  // --- תבניות גל (מחזוריות לאינסוף) ---
-  patterns: [
-    'normal','normal','push','normal','breathe',
-    'normal','push','boss','normal','breathe',
-    'swarm','normal','push','normal','siege',
-  ],
-
-  // --- כלי עזר ---
-  getPattern(wave){
-    return this.patterns[(wave-1) % this.patterns.length];
-  },
-
-  // חישוב skill חדש בסוף כל גל
-  update(waveStats, lives, money, wave){
-    const total = waveStats.intercepted + waveStats.hit;
-    const acc   = total > 0 ? waveStats.intercepted / total : 0.85;
-    const healthScore = lives / 5;
-    const ecoScore    = Math.min(1, money / 4000);
-    const towerCount  = (towers.length + iafDrones.length);
-    const buildScore  = Math.min(1, towerCount / 8);
-
-    // שמור היסטוריה (עד 5 גלים אחרונים)
-    this.history.push({acc, lives, money, wave});
-    if(this.history.length > 5) this.history.shift();
-
-    // ממוצע גלל אחרונים לגמישות
-    let avgAcc = acc, avgHealth = healthScore;
-    if(this.history.length >= 2){
-      avgAcc    = this.history.reduce((s,h)=>s+h.acc,0)  / this.history.length;
-      avgHealth = this.history.reduce((s,h)=>s+h.lives,0) / this.history.length / 5;
-    }
-
-    // ניקוד ביצועי גל
-    const perfScore = avgAcc * 0.45 + avgHealth * 0.30 + ecoScore * 0.15 + buildScore * 0.10;
-
-    // עדכון skill — למעלה אם ביצוע טוב, למטה אם לחוץ
-    const delta = perfScore - 0.62; // 0.62 = "אזור הנוחות" האופטימלי
-    const rate  = delta > 0 ? this.LEARN_RATE_UP : this.LEARN_RATE_DOWN;
-    this.skill  = Math.max(this.SKILL_FLOOR, Math.min(this.SKILL_CEIL,
-                    this.skill + delta * rate));
-
-    // רצף ניצחון / הפסד
-    if(waveStats.hit === 0) { this.streak++; this.hitStreak = 0; }
-    else { this.hitStreak++; this.streak = 0; }
-
-    // בונוס לחץ: אחרי 3 גלים ללא פגיעה — דחיפה נוספת
-    if(this.streak >= 3) this.skill = Math.min(this.SKILL_CEIL, this.skill + 0.03);
-    // הקלה: אחרי 2 גלים קשים ברצף — הקלה
-    if(this.hitStreak >= 2) this.skill = Math.max(this.SKILL_FLOOR, this.skill - 0.05);
-
-    return {perfScore, acc, delta};
-  },
-
-  // תיאור מצב ה-AI למשתמש
+  // תיאור מצב לממשק — לפי גל
   statusLabel(){
-    if(this.skill < 0.15) return {txt:'מתחיל', col:'var(--green)'};
-    if(this.skill < 0.30) return {txt:'סטנדרט', col:'#88ff00'};
-    if(this.skill < 0.50) return {txt:'מיומן', col:'var(--yellow)'};
-    if(this.skill < 0.70) return {txt:'מתקדם', col:'var(--orange)'};
-    if(this.skill < 0.85) return {txt:'מומחה', col:'var(--red)'};
-    return {txt:'אליטה ☠', col:'#ff00ff'};
-  }
+    const w = G ? G.wave : 1;
+    if(w <= 5)  return {txt:'קל · גל '+w+'/10',      col:'var(--green)'};
+    if(w <= 9)  return {txt:'מאתגר · גל '+w+'/10',   col:'var(--yellow)'};
+    if(w === 10) return {txt:'⚠ בוס גל 10!',          col:'var(--red)'};
+    if(w <= 14) return {txt:'קשה · גל '+w,            col:'var(--orange)'};
+    if(w <= 19) return {txt:'מסוכן · גל '+w,          col:'var(--red)'};
+    if(w % 10 === 0) return {txt:'💀 בוס גל '+w+'!', col:'#ff00ff'};
+    return {txt:'אינסוף · גל '+w,                     col:'#ff00ff'};
+  },
+
+  // עדכון ריק — לתאימות
+  update(){ return {perfScore:0.7, acc:0.8, delta:0}; }
 };
 
-// --- פונקציות גל שמשתמשות ב-AI ---
+// --- פונקציות קושי לפי גל בלבד ---
 
-function getDiff(){ return AI.skill; }
+function getDiff(){ return Math.min(0.97, (G.wave - 1) * 0.055); }
 
-function waveCountBase(wave){
-  const d = AI.skill;
-  const pat = AI.getPattern(wave);
-  let base = Math.floor(5 + wave * 0.35 + d * 18);
-  if(pat === 'push')    base = Math.floor(base * 1.35);
-  if(pat === 'boss')    base = Math.floor(base * 1.1);
-  if(pat === 'swarm')   base = Math.floor(base * 1.6);
-  if(pat === 'siege')   base = Math.floor(base * 1.2);
-  if(pat === 'breathe') base = Math.floor(base * 0.55);
-  return base + Math.floor(Math.random() * (2 + d * 4));
+// האם זה גל בוס?
+function isBossWave(w){ return w===10||(w>=20&&w%10===0); }
+
+// תבנית גל — גלים 1-5 נינוחים, 6-9 עולים, 10 בוס, אח"כ מחזור
+function getPattern(wave){
+  if(isBossWave(wave)) return 'boss';
+  // גלים 1-5: קל לגמרי — בלי לחץ ונחיל
+  if(wave<=5){
+    const earlyCyc=['normal','normal','normal','normal','breathe'];
+    return earlyCyc[wave-1];
+  }
+  // גלים 6-9: מאתגר — עם לחץ אחד
+  if(wave<=9){
+    const midCyc=['normal','push','normal','normal'];
+    return midCyc[(wave-6)%4];
+  }
+  // גל 11+: מחזור מלא
+  const cycle=(wave-11)%5;
+  const cyc5=['normal','push','normal','swarm','breathe'];
+  return cyc5[cycle];
 }
 
+function shouldFireFromSide(wave){ return wave>=15; }
+
+// כמות טילים
+function waveCountBase(wave){
+  const pat=getPattern(wave);
+  let base;
+  if(wave<=5)       base=4+wave*2;           // גל 1→6, גל 5→14 — קל
+  else if(wave<=10) base=12+(wave-5)*5;      // גל 6→17 .. גל 10→37
+  else if(wave<=15) base=35+(wave-10)*6;     // גל 11→41 .. גל 15→65
+  else if(wave<=20) base=65+(wave-15)*8;     // גל 16→73 .. גל 20→105
+  else              base=105+(wave-20)*9;    // גל 21+ → אינסוף
+  if(pat==='boss')   base=Math.floor(base*1.8);
+  if(pat==='push')   base=Math.floor(base*1.3);
+  if(pat==='swarm')  base=Math.floor(base*1.5);
+  if(pat==='breathe')base=Math.floor(base*0.5);
+  return base+Math.floor(Math.random()*4);
+}
+
+// מהירות — עלייה הדרגתית
 function waveSpeedMult(wave){
-  const d = AI.skill;
-  const pat = AI.getPattern(wave);
-  let spd = 0.82 + d * 1.25 + Math.min(0.22, wave * 0.008);
-  if(pat === 'push' || pat === 'siege') spd *= 1.12;
-  if(pat === 'breathe') spd *= 0.80;
+  const pat=getPattern(wave);
+  let spd;
+  if(wave<=5)       spd=0.60+(wave-1)*0.04;   // גל 1→0.60, גל 5→0.76
+  else if(wave<=10) spd=0.80+(wave-5)*0.06;   // גל 6→0.86 .. גל 10→1.10
+  else if(wave<=15) spd=1.10+(wave-10)*0.06;  // גל 11→1.16 .. גל 15→1.40
+  else if(wave<=20) spd=1.40+(wave-15)*0.05;  // גל 16→1.45 .. גל 20→1.65
+  else              spd=1.65+(wave-20)*0.03;  // גל 21+ → עד אינסוף
+  spd=Math.min(spd,3.2);
+  if(pat==='push'||pat==='boss') spd*=1.12;
+  if(pat==='breathe') spd*=0.75;
   return spd;
 }
 
+// HP טילים
 function waveHPMult(wave){
-  const d = AI.skill;
-  return 1 + d * 1.8 + Math.max(0, wave - 8) * 0.018;
+  if(wave<=5)  return 1.0;
+  if(wave<=10) return 1.0+(wave-5)*0.15;   // גל 10 → 1.75
+  if(wave<=15) return 1.75+(wave-10)*0.12; // גל 15 → 2.35
+  if(wave<=20) return 2.35+(wave-15)*0.12; // גל 20 → 2.95
+  return 2.95+(wave-20)*0.10;              // גל 21+ → ∞
 }
 
+// סוגי טילים לפי גל
 function waveMissilePool(wave){
-  const pool = ['rocket','rocket'];
-  const d = AI.skill;
-  // סוגי טילים נפתחים לפי skill — לא רק גל
-  if(wave >= 3  || d > 0.15) pool.push('drone');
-  if(wave >= 5  || d > 0.25) pool.push('micro');
-  if(wave >= 7  || d > 0.35) pool.push('cruise');
-  if(wave >= 9  || d > 0.45) pool.push('ballistic');
-  if(wave >= 11 || d > 0.52) pool.push('drone','suicide_drone');
-  if(wave >= 13 || d > 0.60) pool.push('emp_missile');
-  if(wave >= 15 || d > 0.68) pool.push('cluster');
-  if(wave >= 18 || d > 0.76) pool.push('hypersonic');
-  if(wave >= 22 || d > 0.86) pool.push('ballistic_heavy');
-
-  // תבנית גל משפיעה על ההרכב
-  const pat = AI.getPattern(wave);
-  if(pat === 'swarm'){
-    // נחיל — הרבה קטן ומהיר
-    for(let i=0;i<4;i++) pool.push('drone','micro','suicide_drone');
-  } else if(pat === 'siege'){
-    // מצור — בליסטיים כבדים
-    if(d > 0.3) { pool.push('ballistic','ballistic'); if(d>0.6) pool.push('ballistic_heavy'); }
+  const pool=['rocket','rocket','rocket'];
+  if(wave>=3)  pool.push('drone');
+  if(wave>=5)  pool.push('micro');
+  if(wave>=7)  pool.push('cruise');
+  if(wave>=8)  pool.push('drone','micro');
+  if(wave>=9)  pool.push('ballistic');
+  if(wave>=10) pool.push('suicide_drone');
+  if(wave>=12) pool.push('emp_missile');
+  if(wave>=14) pool.push('cluster');
+  if(wave>=16) pool.push('hypersonic');
+  if(wave>=19) pool.push('ballistic','ballistic_heavy');
+  if(wave>=23) pool.push('hypersonic','ballistic_heavy');
+  const pat=getPattern(wave);
+  if(pat==='swarm'){
+    for(let i=0;i<5;i++) pool.push('drone','micro','suicide_drone');
+  } else if(pat==='boss'){
+    if(wave>=10) pool.push('ballistic_heavy','ballistic_heavy');
+    if(wave>=16) pool.push('hypersonic');
   }
   return pool;
 }
 
 function surpriseMinWave(type){
-  // עם AI — surprise attacks מופיעים לפי skill, לא רק גל
-  const d = AI.skill;
-  const bySkill = {
-    barrage:3, drone_swarm:3, north_barrage:4,
-    emp_attack:5, suicide_wave:4, hypersonic_trio:d>0.55?6:999,
-    cluster_wave:d>0.45?5:999, mixed_assault:d>0.50?5:999,
-    blackout:d>0.40?4:999, ballistic_rain:d>0.50?5:999
+  const byWave = {
+    barrage:4, drone_swarm:4, north_barrage:5,
+    emp_attack:7, suicide_wave:6, hypersonic_trio:15,
+    cluster_wave:13, mixed_assault:12,
+    blackout:8, ballistic_rain:12
   };
-  return bySkill[type] || 5;
+  return byWave[type] || 6;
 }
 
 function updateAdaptiveDifficulty(){
-  // נקרא בסוף כל גל — מעדכן AI.skill
-  if(!G.currentWaveStats) return;
-  const result = AI.update(G.currentWaveStats, G.lives, G.money, G.wave);
-  // הודעת משוב קצרה לשחקן
-  if(result.delta > 0.1 && G.wave > 2)
-    addLog(`⬆ AI: קושי עולה (${AI.statusLabel().txt})`,'med');
-  else if(result.delta < -0.1)
-    addLog(`⬇ AI: מקל מעט (${AI.statusLabel().txt})`,'low');
-  // סנכרון לשדות הישנים (לתאימות)
-  G.aiDifficulty = AI.skill;
-  G.aiTargetDifficulty = AI.skill;
+  // שמור לתאימות — לא משנה קושי
+  G.aiDifficulty = getDiff();
+  G.aiTargetDifficulty = getDiff();
 }
 
 function diffColor(){
-  const d = AI.skill;
-  if(d < 0.2) return 'var(--green)';
-  if(d < 0.4) return '#88ff00';
-  if(d < 0.6) return 'var(--yellow)';
-  if(d < 0.8) return 'var(--orange)';
+  const w = G.wave;
+  if(w <= 5)  return 'var(--green)';
+  if(w <= 9)  return 'var(--yellow)';
+  if(w <= 14) return 'var(--orange)';
   return 'var(--red)';
 }
 
-// --- תווית AI בממשק ---
+// --- תווית גל בממשק ---
 function updAILabel(){
   const s = AI.statusLabel();
   const el = document.getElementById('diff-lbl');
-  if(el){
-    el.textContent = s.txt + ' · ' + Math.round(AI.skill*10)+'/10';
-    el.style.color = s.col;
-  }
+  if(el){ el.textContent = s.txt; el.style.color = s.col; }
   const fill = document.getElementById('diff-fill');
-  if(fill){
-    fill.style.width = Math.round(AI.skill*100)+'%';
-    fill.style.background = s.col;
-  }
+  const pct = Math.min(100, ((G.wave-1)/30)*100);
+  if(fill){ fill.style.width = pct+'%'; fill.style.background = s.col; }
 }
 
 // ============ STATE ============
@@ -913,7 +987,8 @@ const G={
   playerName:'אנונימי',
   lastScore:0,lastWave:1,
   surpriseCount:0,
-  shieldActive:false,shieldTimer:0,
+  shieldActive:false,shieldTimer:0,shieldWavesLeft:0,
+  nukeWavesLeft:0,
   currentEvent:null,eventTimer:0,
   aiDifficulty:0.05,aiTargetDifficulty:0.05,
   currentWaveStats:null,lastWaveStats:null,
@@ -929,11 +1004,10 @@ let cityHP=[3,3,3,3,3];
 
 // ============ TOWER CONFIGS ============
 const TC={
-  iron_dome: {name:'כיפת ברזל',cost:80, range:140,color:'#00d4ff',fr:52,sp:4.5,icon:'🔵',dmg:['rocket','drone','micro','suicide_drone']},
-  david_sling:{name:'קלע דוד',  cost:220,range:200,color:'#00ff6e',fr:82,sp:6.2,icon:'🟢',dmg:['ballistic','cruise','rocket','emp_missile','ballistic_heavy']},
-  arrow3:    {name:'חץ',     cost:420,range:280,color:'#ffd900',fr:108,sp:8.2,icon:'🟡',dmg:['ballistic','hypersonic','cluster','emp_missile','ballistic_heavy']},
-  laser:     {name:'לייזר',    cost:300,range:155,color:'#bb33ff',fr:16,sp:999, icon:'🟣',dmg:['drone','micro','suicide_drone'],laser:true},
-  phalanx:   {name:'פלנקס',    cost:260,range:115,color:'#ff7300',fr:20,sp:7.2,icon:'🟠',dmg:['rocket','drone','cruise','micro','cluster','suicide_drone','emp_missile']},
+  iron_dome: {name:'כיפת ברזל',cost:80, range:140,color:'#00d4ff',fr:52,sp:4.5,icon:'🔵',dmg:['rocket','micro']},
+  david_sling:{name:'קלע דוד',  cost:220,range:200,color:'#00ff6e',fr:82,sp:6.2,icon:'🟢',dmg:['rocket','micro','cruise','emp_missile']},
+  laser:     {name:'לייזר',    cost:300,range:155,color:'#bb33ff',fr:16,sp:999, icon:'🟣',dmg:['drone','suicide_drone'],laser:true},
+  arrow3:    {name:'חץ',       cost:440,range:280,color:'#ffd900',fr:108,sp:8.2,icon:'🟡',dmg:['ballistic','hypersonic','cluster','ballistic_heavy']},
   iaf_drone: {name:'מזל"ט פרדי',cost:900,range:260,color:'#ffaa00',fr:65,sp:7.5,icon:'🛸',dmg:['rocket','drone','cruise','ballistic','micro','cluster','hypersonic','emp_missile','suicide_drone','ballistic_heavy'],isDrone:true,maxHP:8,patrol:true},
 };
 
@@ -952,9 +1026,9 @@ const MC={
 };
 
 // ============ COOLDOWNS ============
-const ACD={emp:0,airstrike:0,repair:0,nuke:0,shield:0,us_aid:0};
-const AMCD={emp:200,airstrike:360,repair:500,nuke:660,shield:420,us_aid:900};
-const ACST={emp:220,airstrike:320,repair:400,nuke:750,shield:550,us_aid:1800};
+const ACD={emp:0,repair:0,nuke:0,shield:0};
+const AMCD={emp:600,repair:500,nuke:660,shield:420};
+const ACST={emp:220,repair:400,nuke:750,shield:550};
 
 // ============ SURPRISE ATTACKS ============
 const SURPRISE_ATTACKS=[
@@ -1019,19 +1093,23 @@ function buildWave(wn){
   const q=[];
   const pool=waveMissilePool(wn);
   const count=waveCountBase(wn);
-  const delayBase=Math.max(8, 58-wn*1.5);
+  const delayBase=Math.max(6, 55-wn*1.8);
   for(let i=0;i<count;i++){
     const type=pool[Math.floor(Math.random()*pool.length)];
-    q.push({type,delay:Math.floor(i*delayBase+Math.random()*18)});
+    // מגל 15 — חלק מהטילים יורים מהצדדים
+    const side = shouldFireFromSide(wn) && Math.random() < Math.min(0.55, (wn-14)*0.04);
+    q.push({type, delay:Math.floor(i*delayBase+Math.random()*16), side});
   }
-  const pat = AI.getPattern(wn);
-  // בוס גל — כל 5 גלים (אינסופי)
+  const pat = getPattern(wn);
   if(pat==='boss'){
-    const bossTypes = AI.skill > 0.6
-      ? ['ballistic_heavy','hypersonic','cluster','ballistic_heavy']
+    const bossTypes = wn >= 20
+      ? ['ballistic_heavy','hypersonic','cluster','ballistic_heavy','hypersonic']
       : ['ballistic_heavy','hypersonic','cluster'];
-    bossTypes.forEach((t,i)=>q.push({type:t,delay:q[q.length-1].delay+(i+1)*100}));
-    setTimeout(()=>{showAtkBanner(`🔥 גל בוס ${wn}!`,'מפקד החזית — כל הכוחות!');addLog(`💀 גל בוס ${wn}!`,'event');},400);
+    bossTypes.forEach((t,i)=>q.push({type:t, delay:q[q.length-1].delay+(i+1)*90, side:false}));
+    setTimeout(()=>{
+      showAtkBanner(`💀 גל בוס ${wn}!`, wn>=20?'מתקפה כבדה — כל הכוחות!':'מפקד החזית מגיע!');
+      addLog(`💀 גל בוס ${wn}!`,'event');
+    },400);
   }
   return q;
 }
@@ -1065,7 +1143,24 @@ function spawnMForced(type,dir){
     id:Math.random(),zz:false,zzd:1,zzt:0,intercepted:false,trail:[],tgt,a:1});
 }
 
-// ============ PLACE TOWER ============
+// ירי מהצד (גל 15+) — מגיע מצד שמאל או ימין
+function spawnMFromSide(type){
+  const cfg=MC[type]||MC.rocket;
+  const tgt=CITIES[Math.floor(Math.random()*CITIES.length)];
+  const fromLeft=Math.random()<0.5;
+  const sx=fromLeft?-22:W+22;
+  const sy=H*0.05+Math.random()*H*0.55;
+  const spdMul=waveSpeedMult(G.wave);
+  const hpMul=waveHPMult(G.wave);
+  const spd=cfg.speed*spdMul;
+  const dx=tgt.x-sx, dy=(H-30)-sy;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const finalHP=Math.max(1,Math.round(cfg.hp*hpMul));
+  projs.push({x:sx,y:sy,tx:tgt.x,ty:H-30,
+    vx:(dx/dist)*spd, vy:(dy/dist)*spd,
+    type,cfg:{...cfg},hp:finalHP,baseHP:finalHP,
+    id:Math.random(),zz:false,zzd:1,zzt:0,intercepted:false,trail:[],tgt,a:1});
+}
 function placeTower(x,y){
   const cfg=TC[G.sel];
   if(G.money<cfg.cost){shakeA();return;}
@@ -1196,6 +1291,12 @@ function updProjs(){
       if(ct&&cd<18&&ct.cfg&&ct.cfg.isDrone){ct.hp-=2;spawnExp(p.x,p.y,'#ff6600',1);p.intercepted=true;projs.splice(i,1);continue;}
     }
     p.x+=p.vx;p.y+=p.vy;
+    // מכה גרעינית פעילה — הורסת כל טיל שנכנס
+    if(G.nukeWavesLeft>0&&!p.intercepted){
+      p.intercepted=true;G.intercepted++;G.wKill++;G.score+=p.cfg.reward;
+      if(G.currentWaveStats) G.currentWaveStats.intercepted++;
+      spawnExp(p.x,p.y,p.cfg.color,0.7);projs.splice(i,1);i--;continue;
+    }
     // IAF drones take damage from missiles that fly close (collision)
     for(let di=0;di<iafDrones.length;di++){
       const d=iafDrones[di];
@@ -1229,7 +1330,11 @@ function updWave(){
     return;
   }
   wTimer++;
-  if(wQueue.length>0&&wTimer>=wQueue[0].delay){spawnM(wQueue[0].type);wQueue.shift();}
+  if(wQueue.length>0&&wTimer>=wQueue[0].delay){
+    const item=wQueue[0];
+    if(item.side) spawnMFromSide(item.type); else spawnM(item.type);
+    wQueue.shift();
+  }
   if(wQueue.length===0&&projs.length===0&&inters.length===0){
     const bonus=Math.floor(200+G.wave*50+G.money*.03);
     G.money+=bonus;G.score+=bonus;updMoney();
@@ -1238,6 +1343,18 @@ function updWave(){
     document.getElementById('h-wave').textContent=`${G.wave}`;
     setMode(`גל ${G.wave-1} הושלם ✓`);
     updDiff();
+    // מגן הערים — הורד גל
+    if(G.shieldWavesLeft>0){
+      G.shieldWavesLeft--;
+      if(G.shieldWavesLeft<=0){G.shieldActive=false;G.shieldTimer=0;addLog('מגן הערים כבה','med');}
+      else addLog(`מגן הערים — עוד ${G.shieldWavesLeft} גל`,'low');
+    }
+    // מכה גרעינית — הורד גל
+    if(G.nukeWavesLeft>0){
+      G.nukeWavesLeft--;
+      if(G.nukeWavesLeft<=0) addLog('מכה גרעינית — תם','med');
+      else addLog(`☢️ גרעיני פעיל — עוד ${G.nukeWavesLeft} גל`,'high');
+    }
   }
   G.wProg=G.wSize>0?Math.round((G.wKill/G.wSize)*100):0;
   document.getElementById('wbar').style.width=G.wProg+'%';
@@ -1249,7 +1366,6 @@ function updWave(){
   document.getElementById('st-t').textContent=projs.length;
   if(!G.wBetween){surpriseTimer++;if(surpriseTimer>=nextSurpriseIn)triggerSurprise();}
   if(activeSurprise){activeSurprise.elapsed++;if(activeSurprise.elapsed>=activeSurprise.duration)activeSurprise=null;}
-  if(G.shieldActive){G.shieldTimer--;if(G.shieldTimer<=0){G.shieldActive=false;addLog('מגן כבה','med');}}
 }
 
 function updDiff(){
@@ -1268,95 +1384,83 @@ function startNextWave(){
   wQueue=buildWave(G.wave);
   G.wSize=wQueue.length;G.wKill=0;
   document.getElementById('h-wave').textContent=`${G.wave}`;
-  const pat = AI.getPattern(G.wave);
-  const patLabel = {normal:'',push:' 🔴 לחץ',breathe:' 🟢 נשימה',boss:' 💀 בוס',swarm:' 🤖 נחיל',siege:' ⚔️ מצור'}[pat]||'';
-  const aiS = AI.statusLabel();
-  document.getElementById('abar').textContent=`▶ גל ${G.wave}${patLabel} — ${wQueue.length} איומים | ${aiS.txt} ◀`;
-  setMode(`גל ${G.wave}${patLabel} — פעיל`);
-  addLog(`▲ גל ${G.wave}${patLabel} | ${wQueue.length} איומים`,'high');
+  const pat = getPattern(G.wave);
+  const patLabel = {normal:'',push:' 🔴 לחץ',breathe:' 🟢 נשימה',boss:' 💀 בוס',swarm:' 🤖 נחיל'}[pat]||'';
+  const sideWarn = shouldFireFromSide(G.wave) ? ' ↔ צדדי':'';
+  const statusTxt = AI.statusLabel().txt;
+  document.getElementById('abar').textContent=`▶ גל ${G.wave}${patLabel}${sideWarn} — ${wQueue.length} איומים ◀`;
+  setMode(`גל ${G.wave}${patLabel}${sideWarn} — פעיל`);
+  addLog(`▲ גל ${G.wave}${patLabel}${sideWarn} | ${wQueue.length} איומים`,'high');
+  if(G.wave===15) addLog('⚠ טילים מגיעים מהצדדים!','event');
   updDiff();
 }
 
 // ============ ABILITIES ============
 function useAb(type){
+  if(ACD[type]===undefined) return;
   if(ACD[type]>0) return;
   if(G.money<ACST[type]){shakeA();return;}
   G.money-=ACST[type];updMoney();
   ACD[type]=AMCD[type];
 
   if(type==='emp'){
+    // מנטרל הכל כרגע, חוזר לאחר 10 שניות (600 פריימים = cooldown)
     empWaves.push({x:W/2,y:H/2,r:0,maxR:Math.max(W,H)*.82,alpha:1});
     let c=0;for(const p of projs)if(!p.intercepted){p.intercepted=true;G.intercepted++;c++;spawnExp(p.x,p.y,'#00ffcc',.6);}
-    G.score+=c*7;addLog(`EMP — ${c} נוטרלו`,'med');
-  } else if(type==='airstrike'){
-    strikes.push({x:W*.15+Math.random()*W*.7,y:-40,vy:7,exploded:false});
-    addLog('תקיפה אווירית!','med');
+    G.score+=c*7;addLog(`זרם חשמל — ${c} נוטרלו · חוזר בעוד 10s`,'med');
+
   } else if(type==='repair'){
-    let fixed=false;
+    // מרפא עיר פגועה ומוסיף לב תמיד
+    let healed=false;
     for(let ci=0;ci<cityHP.length;ci++)if(cityHP[ci]<3){
-      cityHP[ci]=Math.min(3,cityHP[ci]+2);G.lives=Math.min(5,G.lives+1);updLives();
-      spawnExp(CITIES[ci].x,H-40,'#00ff6e',1.4);addLog(`${CITIES[ci].name} שוקמה`,'low');fixed=true;break;
+      cityHP[ci]=Math.min(3,cityHP[ci]+2);
+      spawnExp(CITIES[ci].x,H-40,'#00ff6e',1.4);
+      addLog(`${CITIES[ci].name} שוקמה`,'low');
+      healed=true;break;
     }
-    if(!fixed){G.money+=320;updMoney();addLog('הכל תקין — +$320','low');}
+    // תמיד מוסיף לב
+    G.lives=Math.min(5,G.lives+1);updLives();
+    if(!healed) addLog('הכל תקין — לב נוסף!','low');
+    spawnExp(W/2,H*0.6,'#00ff6e',1.2);
+
   } else if(type==='nuke'){
+    // הורסת הכל בגל הנוכחי + הגל הבא
+    G.nukeWavesLeft=2;
     nukeEff={r:0,maxR:Math.max(W,H),alpha:1};
     let c=0;for(const p of projs)if(!p.intercepted){p.intercepted=true;G.intercepted++;c++;}
-    G.score+=c*14;addLog(`☢️ גרעיני — ${c} השמדות`,'high');
+    G.score+=c*14;addLog(`☢️ מכה גרעינית — ${c} השמדות · פעיל 2 גלים`,'high');
     spawnExp(W/2,H/2,'#ffd900',7);
     const ef=document.getElementById('eflash');
     ef.style.background='rgba(255,217,0,.18)';ef.style.opacity='1';
     setTimeout(()=>{ef.style.opacity='0';ef.style.background='rgba(0,0,0,0)';},600);
+
   } else if(type==='shield'){
-    G.shieldActive=true;G.shieldTimer=380;
-    addLog('מגן אנרגיה פעיל — 6 שניות','low');
-  } else if(type==='us_aid'){
-    // BIG US AID: sends 3 airstrikes + money bonus + heals + clears
-    addLog('🇺🇸 סיוע אמריקאי!','us');
-    const ub=document.getElementById('us-banner');
-    document.getElementById('us-sub').textContent='F-35, נשק חכם ותמיכה כספית!';
-    ub.classList.add('show');
-    setTimeout(()=>ub.classList.remove('show'),3000);
-    // 3 waves of airstrikes
-    for(let i=0;i<3;i++){
-      setTimeout(()=>{
-        strikes.push({x:W*.1+Math.random()*W*.8,y:-40,vy:9,exploded:false,us:true});
-      },i*600);
-    }
-    // Heal one city
-    for(let ci=0;ci<cityHP.length;ci++)if(cityHP[ci]<3){
-      cityHP[ci]=Math.min(3,cityHP[ci]+1);G.lives=Math.min(5,G.lives+1);updLives();
-      spawnExp(CITIES[ci].x,H-40,'#00aaff',1.6);break;
-    }
-    // Cash bonus
-    const cashBonus=500+G.wave*30;
-    setTimeout(()=>{G.money+=cashBonus;updMoney();addLog(`+$${cashBonus} מימון אמריקאי`,'us');},1500);
-    // Blue EMP-like pulse
-    setTimeout(()=>{
-      empWaves.push({x:W/2,y:H/2,r:0,maxR:Math.max(W,H)*.7,alpha:.8,color:'#0066ff'});
-      let c=0;
-      for(const p of projs)if(!p.intercepted&&Math.random()<.55){p.intercepted=true;G.intercepted++;c++;spawnExp(p.x,p.y,'#0088ff',.7);}
-      if(c>0) addLog(`F-35 השמיד ${c} יעדים`,'us');
-    },1800);
-    const ef=document.getElementById('eflash');
-    ef.style.background='rgba(0,80,200,.14)';ef.style.opacity='1';
-    setTimeout(()=>{ef.style.opacity='0';ef.style.background='rgba(0,0,0,0)';},800);
+    // מגן על הערים למשך 2 גלים שלמים
+    G.shieldActive=true;
+    G.shieldWavesLeft=2;
+    G.shieldTimer=99999; // לא מבוסס טיימר — מבוסס גלים
+    addLog('מגן הערים פעיל — 2 גלים','low');
   }
 }
 
 function updAbs(){
   for(const k in ACD){
+    const btnEl=document.getElementById('btn-'+k);
+    const cdEl=document.getElementById('cd-'+k);
+    const cdbEl=document.getElementById('cdb-'+k);
+    const mb=document.getElementById('mob-'+k);
     if(ACD[k]>0){
       ACD[k]--;
       const pct=100-(ACD[k]/AMCD[k])*100;
-      document.getElementById('cdb-'+k).style.width=pct+'%';
-      document.getElementById('cd-'+k).textContent=Math.ceil(ACD[k]/60)+'s';
-      document.getElementById('btn-'+k).disabled=true;
-      const mb=document.getElementById('mob-'+k);if(mb)mb.disabled=true;
+      if(cdbEl) cdbEl.style.width=pct+'%';
+      if(cdEl) cdEl.textContent=Math.ceil(ACD[k]/60)+'s';
+      if(btnEl) btnEl.disabled=true;
+      if(mb) mb.disabled=true;
     } else {
-      document.getElementById('cdb-'+k).style.width='100%';
-      document.getElementById('cd-'+k).textContent='מוכן';
-      document.getElementById('btn-'+k).disabled=false;
-      const mb=document.getElementById('mob-'+k);if(mb)mb.disabled=false;
+      if(cdbEl) cdbEl.style.width='100%';
+      if(cdEl) cdEl.textContent='מוכן';
+      if(btnEl) btnEl.disabled=false;
+      if(mb) mb.disabled=false;
     }
   }
   for(let i=strikes.length-1;i>=0;i--){
@@ -1393,6 +1497,7 @@ let stars=null,frame=0;
 function genStars(){stars=Array.from({length:80},()=>({x:Math.random(),y:Math.random()*.68,r:Math.random()*1.7,a:Math.random()*.85+.1,blink:Math.random()*200}));}
 
 function render(){
+  if(!W||!H){ resize(); if(!W||!H) return; }
   frame++;
   ctx.clearRect(0,0,W,H);
   const bg=ctx.createLinearGradient(0,0,0,H);
@@ -1423,15 +1528,7 @@ function render(){
     ctx.fillStyle=ng;ctx.fill();
     ctx.strokeStyle=`rgba(255,217,0,${nukeEff.alpha*.85})`;ctx.lineWidth=5;ctx.stroke();
   }
-  // Shield
-  if(G.shieldActive){
-    const pulse=.55+.45*Math.sin(frame*.09);
-    ctx.beginPath();ctx.moveTo(0,H-32);ctx.lineTo(W,H-32);
-    ctx.strokeStyle=`rgba(0,212,255,${pulse*.6})`;ctx.lineWidth=3;ctx.stroke();
-    const sg=ctx.createLinearGradient(0,H-32,0,H);
-    sg.addColorStop(0,`rgba(0,212,255,${pulse*.14})`);sg.addColorStop(1,'rgba(0,212,255,0)');
-    ctx.fillStyle=sg;ctx.fillRect(0,H-32,W,32);
-  }
+  // Shield visuals handled per-city in drawGround()
   // Tower ranges
   for(const t of towers)if(t.showRange){
     ctx.beginPath();ctx.arc(t.x,t.y,t.range,0,Math.PI*2);
@@ -1559,19 +1656,108 @@ function drawGround(){
   const g=ctx.createLinearGradient(0,H-32,0,H);
   g.addColorStop(0,'#092207');g.addColorStop(1,'#030d03');
   ctx.fillStyle=g;ctx.fillRect(0,H-32,W,32);
-  ctx.strokeStyle='#112c11';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,H-32);ctx.lineTo(W,H-32);ctx.stroke();
+  ctx.strokeStyle='#112c11';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(0,H-32);ctx.lineTo(W,H-32);ctx.stroke();
+
   for(let ci=0;ci<CITIES.length;ci++){
     const c=CITIES[ci],hp=cityHP[ci],alive=hp>0;
     const col=hp>=3?'#00ff6e':hp>=2?'#ffd900':hp>=1?'#ff7300':'#ff1a1a';
-    ctx.fillStyle=alive?col+'2e':'#1a1a1a22';ctx.fillRect(c.x-22,H-55,44,23);
-    if(alive){ctx.fillStyle=col+'88';for(let wx=0;wx<3;wx++)for(let wy=0;wy<2;wy++)ctx.fillRect(c.x-16+wx*11,H-51+wy*7,6,5);}
-    for(let h=0;h<3;h++){
-      ctx.beginPath();ctx.arc(c.x-12+h*12,H-20,3,0,Math.PI*2);
-      ctx.fillStyle=h<hp?col:'#1e1e1e';ctx.shadowColor=h<hp?col:'transparent';ctx.shadowBlur=h<hp?4:0;
+    const shielded=G.shieldActive;
+    const bCol=shielded?'#00aaff':col; // כחול כשמגן פעיל
+
+    ctx.save();
+    ctx.translate(c.x,H-32);
+
+    // --- בניינים ---
+    // בניין מרכזי גבוה
+    ctx.fillStyle=alive?(shielded?'rgba(0,120,255,0.55)':col+'55'):'#1a1a1a33';
+    ctx.fillRect(-8,-30,16,30);
+    // בניין שמאל נמוך
+    ctx.fillStyle=alive?(shielded?'rgba(0,100,220,0.45)':col+'33'):'#1a1a1a22';
+    ctx.fillRect(-22,-18,12,18);
+    // בניין ימין נמוך
+    ctx.fillRect(10,-22,12,22);
+
+    if(alive){
+      // חלונות בניין מרכזי
+      ctx.fillStyle=shielded?'rgba(150,220,255,0.9)':col+'cc';
+      for(let wy=0;wy<3;wy++)for(let wx=0;wx<2;wx++)
+        ctx.fillRect(-5+wx*7,-27+wy*9,4,5);
+      // חלונות שמאל
+      for(let wy=0;wy<2;wy++)
+        ctx.fillRect(-19+0,-15+wy*8,4,4);
+      // חלונות ימין
+      for(let wy=0;wy<2;wy++)
+        ctx.fillRect(13,-19+wy*9,4,4);
+      // מגדל אנטנה בניין מרכזי
+      ctx.strokeStyle=shielded?'rgba(0,180,255,0.7)':col+'99';
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(0,-30);ctx.lineTo(0,-38);ctx.stroke();
+      ctx.beginPath();ctx.arc(0,-38,2,0,Math.PI*2);
+      ctx.fillStyle=shielded?'rgba(0,212,255,0.9)':col;
+      ctx.fill();
+    }
+
+    // כיפת מגן כחולה
+    if(shielded){
+      const pulse=0.55+0.45*Math.sin(frame*0.1+ci*1.2);
+      const domeR=50;
+      const domeY=-28;
+      // מילוי כיפה
+      ctx.beginPath();
+      ctx.arc(0,domeY,domeR,Math.PI,0);
+      ctx.closePath();
+      const dg2=ctx.createRadialGradient(0,domeY,0,0,domeY,domeR);
+      dg2.addColorStop(0,`rgba(0,160,255,${pulse*0.12})`);
+      dg2.addColorStop(0.6,`rgba(0,120,255,${pulse*0.08})`);
+      dg2.addColorStop(1,`rgba(0,80,200,0)`);
+      ctx.fillStyle=dg2;
+      ctx.fill();
+      // קו כיפה
+      ctx.beginPath();
+      ctx.arc(0,domeY,domeR,Math.PI,0);
+      ctx.strokeStyle=`rgba(0,212,255,${pulse*0.9})`;
+      ctx.lineWidth=2;
+      ctx.shadowColor='#00d4ff';
+      ctx.shadowBlur=12;
+      ctx.stroke();
+      ctx.shadowBlur=0;
+      // קו בסיס
+      ctx.beginPath();
+      ctx.moveTo(-domeR,domeY);ctx.lineTo(domeR,domeY);
+      ctx.strokeStyle=`rgba(0,180,255,${pulse*0.55})`;
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+      // גלי אנרגיה (2 קשתות פנימיות)
+      for(let r=0;r<2;r++){
+        const ir=domeR*(0.5+r*0.25);
+        ctx.beginPath();
+        ctx.arc(0,domeY,ir,Math.PI,0);
+        ctx.strokeStyle=`rgba(100,210,255,${pulse*(0.15-r*0.05)})`;
+        ctx.lineWidth=1;
+        ctx.stroke();
+      }
+      // תג גלים שנשארו
+      ctx.font=`bold 9px Orbitron,monospace`;
+      ctx.fillStyle=`rgba(0,212,255,${pulse})`;
+      ctx.textAlign='center';
+      ctx.fillText(`🛡 ${G.shieldWavesLeft}`,0,domeY-domeR-6);
+    }
+
+    // נקודות HP
+    for(let h2=0;h2<3;h2++){
+      ctx.beginPath();ctx.arc(-12+h2*12,6,3,0,Math.PI*2);
+      ctx.fillStyle=h2<hp?bCol:'#1e1e1e';
+      ctx.shadowColor=h2<hp?bCol:'transparent';
+      ctx.shadowBlur=h2<hp?4:0;
       ctx.fill();ctx.shadowBlur=0;
     }
-    ctx.font=`${clamp(7,1.5,9)}px Heebo,sans-serif`;ctx.fillStyle=alive?'#77bb88':'#3a3a3a';ctx.textAlign='center';
-    ctx.fillText(c.name,c.x,H-7);ctx.textAlign='left';
+    // שם עיר
+    ctx.font=`${clamp(7,1.5,9)}px Heebo,sans-serif`;
+    ctx.fillStyle=alive?(shielded?'#55ccff':'#77bb88'):'#3a3a3a';
+    ctx.textAlign='center';
+    ctx.fillText(c.name,0,14);
+    ctx.restore();
   }
 }
 
@@ -1669,8 +1855,8 @@ function mobSel(el,type){
 }
 
 document.addEventListener('keydown',e=>{
-  const km={'1':'iron_dome','2':'david_sling','3':'arrow3','4':'laser','5':'phalanx','6':'iaf_drone'};
-  const am={'q':'emp','w':'airstrike','e':'repair','r':'nuke','t':'shield','y':'us_aid'};
+  const km={'1':'iron_dome','2':'david_sling','3':'laser','4':'arrow3','5':'iaf_drone'};
+  const am={'q':'emp','e':'repair','r':'nuke','t':'shield'};
   if(km[e.key]){
     G.sel=km[e.key];
     document.querySelectorAll('.di').forEach(x=>x.classList.remove('sel'));
@@ -1706,7 +1892,7 @@ function initGame(){
   activeSurprise=null;surpriseTimer=0;
   AI.skill=0.1; AI.history=[]; AI.streak=0; AI.hitStreak=0;
   Object.assign(G,{money:3500,lives:5,score:0,wave:1,running:true,paused:false,
-    intercepted:0,hit:0,wBetween:true,wBetweenT:200,surpriseCount:0,shieldActive:false,shieldTimer:0,aiDifficulty:0.05,aiTargetDifficulty:0.05,currentWaveStats:null,lastWaveStats:null});
+    intercepted:0,hit:0,wBetween:true,wBetweenT:200,surpriseCount:0,shieldActive:false,shieldTimer:0,shieldWavesLeft:0,nukeWavesLeft:0,aiDifficulty:0.05,aiTargetDifficulty:0.05,currentWaveStats:null,lastWaveStats:null});
   for(const k in ACD) ACD[k]=0;
   resetSurpriseIn();
   updMoney();updLives();updSlots();
@@ -1778,10 +1964,12 @@ function loop(){
   render();
 }
 
-resize();if(window._fb)window._fb.renderMiniLB();loop();
+resize();if(window._fb)window._fb.renderMiniLB();
+window.addEventListener('load', function(){ resize(); });
+loop();
 </script>
 
-<div id="tutorialOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:10000;font-family:'Heebo',sans-serif;color:#e8f1ff;text-align:right;padding:20px;">
+<div id="tutorialOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:10000;font-family:'Heebo',sans-serif;color:#e8f1ff;text-align:right;padding:20px;">
   <div style="max-width:520px;background:#070d16;border:1px solid rgba(120,170,255,.35);border-radius:12px;padding:28px;">
     <h2 style="margin-bottom:14px;color:#00d4ff;font-family:'Orbitron',sans-serif;">איך משחקים</h2>
     <ul style="line-height:1.8;font-size:18px;">
@@ -1804,7 +1992,7 @@ function hideTutorial(){
 function showTutorial(){
   const tutorial=document.getElementById('tutorialOverlay');
   const nameScreen=document.getElementById('scr-name');
-  if(tutorial) tutorial.style.display='flex';
+  if(tutorial){ tutorial.style.display='flex'; tutorial.style.alignItems='center'; tutorial.style.justifyContent='center'; }
   if(nameScreen) nameScreen.classList.add('hidden');
 }
 function showNameScreen(markSeen=true){
