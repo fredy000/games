@@ -1,651 +1,193 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memory Suspect 🕵️</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#07071a;--s1:#0e0e24;--s2:#14142e;--s3:#1c1c3a;--s4:#242448;
-  --accent:#6c47ff;--accent2:#a78bfa;--accent3:#c4b5fd;
-  --pink:#f472b6;--warn:#f59e0b;--ok:#10b981;--bad:#ef4444;
-  --text:#ede9ff;--muted:#6b6897;--border:#2a2a50;
-  --r8:8px;--r12:12px;--r16:16px;--r20:20px;--r24:24px;
-}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;overflow-x:hidden}
-#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.star{position:absolute;border-radius:50%;background:white;animation:twinkle var(--d) ease-in-out infinite var(--delay)}
-@keyframes twinkle{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:var(--op);transform:scale(1.4)}}
-#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center}
-.screen{display:none;flex-direction:column;align-items:center;width:100%;max-width:560px;padding:20px 16px;min-height:100vh}
-.screen.active{display:flex}
-.logo{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,10vw,4.5rem);font-weight:800;text-align:center;line-height:1;background:linear-gradient(135deg,#6c47ff,#a78bfa,#f472b6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r20);padding:24px}
-.card-sm{background:var(--s2);border:1px solid var(--border);border-radius:var(--r16);padding:14px 18px}
-input{font-family:'Rubik',sans-serif;background:var(--s3);border:1px solid var(--border);border-radius:var(--r12);color:var(--text);padding:13px 16px;font-size:15px;width:100%;outline:none;transition:border-color .2s,box-shadow .2s}
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(108,71,255,.15)}
-input::placeholder{color:var(--muted)}
-button{font-family:'Rubik',sans-serif;cursor:pointer;border:none;border-radius:var(--r12);font-size:15px;font-weight:500;transition:all .15s;padding:13px 24px}
-.btn{background:var(--accent);color:#fff;width:100%;font-weight:700}
-.btn:hover{background:#5b38e8;transform:translateY(-1px);box-shadow:0 8px 24px rgba(108,71,255,.4)}
-.btn:active{transform:translateY(0)}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
-.btn-ghost{background:var(--s2);color:var(--text);border:1px solid var(--border);width:100%}
-.btn-ghost:hover{background:var(--s3)}
-.btn-sm{padding:9px 18px;font-size:14px;border-radius:var(--r8);width:auto}
-.btn-icon{background:var(--s3);border:1px solid var(--border);border-radius:var(--r8);padding:10px 14px;color:var(--muted);font-size:16px}
-.w-full{width:100%}.flex{display:flex}.col{flex-direction:column}
-.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}
-.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
-.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}
-.text-center{text-align:center}.divider{height:1px;background:var(--border);width:100%}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.badge-ok{background:rgba(16,185,129,.2);color:#34d399}
-.badge-bad{background:rgba(239,68,68,.2);color:#f87171}
-.badge-accent{background:rgba(108,71,255,.2);color:var(--accent3)}
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:14px}
-.av-md{width:40px;height:40px}.av-lg{width:52px;height:52px;font-size:18px}
-.player-chip{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r12);padding:10px 14px;transition:border-color .2s}
-.player-chip.ready{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)}
-.room-code{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:.25em;background:linear-gradient(135deg,var(--accent2),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.timer-wrap{position:relative;flex-shrink:0}
-.timer-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Syne',sans-serif;font-weight:800}
-.scene-wrap{width:100%;background:var(--s1);border:2px solid var(--border);border-radius:var(--r20);overflow:hidden}
-.scene-wrap.suspect-glow{border-color:rgba(239,68,68,.5);box-shadow:0 0 30px rgba(239,68,68,.15)}
-.q-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);padding:20px;width:100%}
-.q-text{font-size:17px;font-weight:600;margin-bottom:16px;line-height:1.45}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.opt{background:var(--s3);border:2px solid var(--border);border-radius:var(--r12);color:var(--text);padding:13px 14px;font-size:14px;font-family:'Rubik',sans-serif;cursor:pointer;transition:all .15s;text-align:center;font-weight:500}
-.opt:hover{border-color:var(--accent2);background:var(--s4)}
-.opt.sel{border-color:var(--accent);background:rgba(108,71,255,.2);color:var(--accent3)}
-.chat-box{width:100%;height:180px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r12);overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:7px}
-.chat-msg{font-size:13.5px;line-height:1.45}
-.chat-msg .who{font-weight:700;margin-left:6px}
-.chat-input-row{display:flex;gap:8px;width:100%}
-.chat-input-row input{flex:1}
-.vote-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
-.v-card{background:var(--s2);border:2px solid var(--border);border-radius:var(--r16);padding:14px 16px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:12px}
-.v-card:hover{border-color:var(--accent2);transform:translateY(-2px)}
-.v-card.sel{border-color:var(--accent);background:rgba(108,71,255,.15)}
-.v-count{margin-right:auto;background:var(--accent);color:#fff;border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700}
-.result-icon{font-size:90px;text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.result-big{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;text-align:center}
-.compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
-.compare-item{background:var(--s2);border:1px solid var(--border);border-radius:var(--r12);overflow:hidden;text-align:center}
-.compare-label{padding:7px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
-.role-card{text-align:center;background:var(--s1);border-radius:var(--r24);padding:36px 28px;width:100%;max-width:360px;border:2px solid var(--border);animation:slideUp .4s cubic-bezier(.34,1.26,.64,1)}
-@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.role-bigicon{font-size:72px;margin:8px 0 12px}
-.countdown-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--accent2);margin-top:8px}
-.ans-row{background:var(--s2);border:1px solid var(--border);border-radius:var(--r12);padding:10px 14px;width:100%}
-.ans-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.ans-chip{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;background:var(--s4);color:var(--text)}
-.ans-chip.conflict{background:rgba(239,68,68,.2);color:#f87171}
-.ans-chip.agree{background:rgba(16,185,129,.15);color:#34d399}
-.wait-overlay{display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;color:var(--muted);font-size:14px;text-align:center}
-.progress-bg{background:var(--s4);border-radius:20px;height:6px;width:100%;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:20px;transition:width .5s ease}
-.copy-btn{background:var(--s3);border:1px solid var(--border);border-radius:var(--r8);padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Rubik',sans-serif}
-.copy-btn:hover{color:var(--text);border-color:var(--accent2)}
-.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spinning .7s linear infinite}
-@keyframes spinning{to{transform:rotate(360deg)}}
-#notif{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--s1);border:1px solid var(--accent);border-radius:var(--r12);padding:12px 22px;font-size:14px;font-weight:500;z-index:9999;display:none;max-width:90vw;text-align:center;box-shadow:0 8px 32px rgba(108,71,255,.25)}
-#notif.show{display:block;animation:notifIn .25s ease}
-@keyframes notifIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-@media(max-width:420px){.vote-grid,.opts,.compare-wrap{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BOUT — Online Boxing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<div id="stars"></div>
-<div id="notif"></div>
-<div id="app">
 
-<!-- HOME -->
-<div id="s-home" class="screen active" style="justify-content:center;gap:0">
-  <div class="logo mb8">Memory<br>Suspect</div>
-  <div style="color:var(--muted);font-size:13px;text-align:center;letter-spacing:.12em;text-transform:uppercase;margin-bottom:36px">זכרון · חשד · דדוקציה</div>
-  <div class="card w-full" style="display:flex;flex-direction:column;gap:16px">
-    <div>
-      <div class="label">השם שלך</div>
-      <input id="inp-name" type="text" placeholder="הכנס שם..." maxlength="14">
+<!-- ══════════════ LOBBY ══════════════ -->
+<div id="screen-lobby" class="screen active">
+  <div class="lobby-bg"></div>
+  <div class="lobby-content">
+    <div class="logo-wrap">
+      <h1 class="logo">BOUT</h1>
+      <div class="logo-sub">ONLINE BOXING ENGINE</div>
     </div>
-    <button class="btn" onclick="createRoom()">➕ צור חדר חדש</button>
-    <div class="divider" style="margin:0;position:relative">
-      <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--s1);padding:0 10px;font-size:12px;color:var(--muted)">או</span>
-    </div>
-    <div style="display:flex;gap:8px">
-      <input id="inp-code" type="text" placeholder="קוד חדר" maxlength="4"
-             style="text-align:center;font-size:22px;font-weight:700;letter-spacing:.3em;font-family:'Syne',sans-serif"
-             oninput="this.value=this.value.toUpperCase()">
-      <button class="btn btn-sm" onclick="joinRoom()" style="width:auto;padding:0 20px;flex-shrink:0">הצטרף</button>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;width:100%">
-    <div class="card-sm text-center"><div style="font-size:24px">👁️</div><div style="font-size:11px;color:var(--muted);margin-top:4px">ראה סצנה</div></div>
-    <div class="card-sm text-center"><div style="font-size:24px">🕵️</div><div style="font-size:11px;color:var(--muted);margin-top:4px">מצא חשוד</div></div>
-    <div class="card-sm text-center"><div style="font-size:24px">🗳️</div><div style="font-size:11px;color:var(--muted);margin-top:4px">הצבע!</div></div>
-  </div>
-</div>
 
-<!-- LOBBY -->
-<div id="s-lobby" class="screen" style="gap:0;padding-top:24px">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;margin-bottom:16px">
-    <div>
-      <div class="label">קוד החדר</div>
-      <div class="room-code" id="disp-code">----</div>
-    </div>
-    <div style="text-align:left">
-      <div class="label">שחקנים</div>
-      <div style="font-size:1.6rem;font-weight:700"><span id="disp-pcount">0</span><span style="color:var(--muted)">/8</span></div>
-    </div>
-  </div>
-  <button class="copy-btn mb12" onclick="copyCode()" style="align-self:flex-start">📋 העתק קוד לשיתוף</button>
-  <div id="lobby-list" class="w-full flex col gap8 mb16"></div>
-  <div id="host-start" style="display:none;width:100%">
-    <button class="btn" id="start-btn" onclick="hostStart()">▶ התחל משחק</button>
-    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px">לפחות 2 שחקנים נדרשים</div>
-  </div>
-  <div id="guest-wait" style="display:none;text-align:center">
-    <div class="wait-overlay"><div class="spin"></div>ממתין לבעל החדר להתחיל...</div>
-  </div>
-  <div style="display:flex;gap:8px;width:100%;margin-top:12px">
-    <button class="btn-ghost" id="ready-btn" onclick="toggleReady()" style="flex:1">✓ מוכן</button>
-    <button class="btn-icon" onclick="leaveRoom()">✕</button>
-  </div>
-</div>
+    <div class="lobby-card">
+      <input id="name-input" class="name-input" type="text"
+             placeholder="ENTER YOUR NAME" maxlength="14" autocomplete="off"/>
 
-<!-- ROLE REVEAL -->
-<div id="s-role" class="screen" style="justify-content:center">
-  <div class="role-card">
-    <div id="role-badge" class="badge badge-ok">שחקן רגיל</div>
-    <div class="role-bigicon" id="role-icon">🙂</div>
-    <div id="role-title" style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:8px">שחקן רגיל</div>
-    <div id="role-desc" style="color:var(--muted);font-size:14px;line-height:1.7">אתה רואה את הסצנה המקורית.<br>שים לב לכל פרט!</div>
-    <div class="divider" style="margin:20px 0"></div>
-    <div style="font-size:13px;color:var(--muted)">המשחק מתחיל בעוד</div>
-    <div class="countdown-num" id="role-cd">3</div>
-  </div>
-</div>
-
-<!-- SCENE VIEW -->
-<div id="s-scene" class="screen" style="gap:0;padding-top:20px">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:14px">
-    <div>
-      <div class="label">שלב 1 מתוך 4</div>
-      <div style="font-size:1.1rem;font-weight:700">צפה בסצנה</div>
-    </div>
-    <div class="timer-wrap" style="width:72px;height:72px">
-      <svg width="72" height="72" style="transform:rotate(-90deg)">
-        <circle cx="36" cy="36" r="28" fill="none" stroke="var(--s4)" stroke-width="4"/>
-        <circle id="scene-tc" cx="36" cy="36" r="28" fill="none" stroke="var(--accent2)" stroke-width="4" stroke-linecap="round" stroke-dasharray="176" stroke-dashoffset="0"/>
-      </svg>
-      <div class="timer-num" style="font-size:20px" id="scene-td">10</div>
-    </div>
-  </div>
-  <div class="scene-wrap" id="scene-wrap">
-    <svg id="scene-svg" viewBox="0 0 520 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg"></svg>
-  </div>
-  <div id="scene-hint" class="card-sm w-full mt12 text-center" style="font-size:14px;color:var(--muted)">
-    👁️ זכור כל פרט — תישאל עליהם...
-  </div>
-</div>
-
-<!-- QUESTIONS -->
-<div id="s-questions" class="screen" style="gap:0;padding-top:20px">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:16px">
-    <div>
-      <div class="label">שלב 2 מתוך 4</div>
-      <div style="font-size:1.1rem;font-weight:700">שאלות על הסצנה</div>
-    </div>
-    <div style="font-size:13px;color:var(--muted)">שאלה <span id="q-n">0</span>/<span id="q-tot">3</span></div>
-  </div>
-  <div id="q-container" class="w-full flex col gap16"></div>
-  <button class="btn mt20 w-full" id="submit-q" onclick="submitAnswers()" style="display:none">שלח תשובות ▶</button>
-  <div id="q-wait" class="wait-overlay" style="display:none">
-    <div class="spin"></div>
-    <span id="q-wait-text">ממתין לשאר השחקנים...</span>
-    <div class="progress-bg w-full mt8"><div class="progress-fill" id="q-wait-prog" style="width:0%"></div></div>
-  </div>
-</div>
-
-<!-- DISCUSSION -->
-<div id="s-discussion" class="screen" style="gap:0;padding-top:20px">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:14px">
-    <div>
-      <div class="label">שלב 3 מתוך 4</div>
-      <div style="font-size:1.1rem;font-weight:700">דיון</div>
-    </div>
-    <div class="timer-wrap" style="width:60px;height:60px">
-      <svg width="60" height="60" style="transform:rotate(-90deg)">
-        <circle cx="30" cy="30" r="22" fill="none" stroke="var(--s4)" stroke-width="3.5"/>
-        <circle id="disc-tc" cx="30" cy="30" r="22" fill="none" stroke="var(--warn)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="138" stroke-dashoffset="0"/>
-      </svg>
-      <div class="timer-num" style="font-size:16px" id="disc-td">40</div>
-    </div>
-  </div>
-  <div id="ans-summary" class="w-full flex col gap8 mb12"></div>
-  <div class="chat-box" id="chat-box"></div>
-  <div class="chat-input-row mt8">
-    <input id="chat-inp" type="text" placeholder="כתוב הודעה..." maxlength="90"
-           onkeydown="if(event.key==='Enter')sendChat()">
-    <button class="btn btn-sm" onclick="sendChat()">שלח</button>
-  </div>
-</div>
-
-<!-- VOTING -->
-<div id="s-voting" class="screen" style="gap:0;padding-top:20px">
-  <div style="text-align:center;margin-bottom:20px;width:100%">
-    <div class="label">שלב 4 מתוך 4</div>
-    <div style="font-size:1.3rem;font-weight:700">מי החשוד?</div>
-    <div style="font-size:13px;color:var(--muted);margin-top:4px">הצבע לשחקן שלדעתך ראה סצנה שונה</div>
-  </div>
-  <div class="vote-grid" id="vote-grid"></div>
-  <button class="btn mt20 w-full" id="vote-confirm" onclick="confirmVote()" style="display:none">אשר הצבעה ✓</button>
-  <div id="vote-wait" class="wait-overlay" style="display:none">
-    <div class="spin"></div>ממתין לכולם להצביע...
-    <div class="progress-bg w-full mt8"><div class="progress-fill" id="vote-wait-prog" style="width:0%"></div></div>
-  </div>
-</div>
-
-<!-- RESULT -->
-<div id="s-result" class="screen" style="justify-content:flex-start;padding-top:28px">
-  <div class="result-icon" id="res-icon">🎉</div>
-  <div class="result-big mt8" id="res-title">הקבוצה ניצחה!</div>
-  <div style="color:var(--muted);text-align:center;margin-top:6px" id="res-sub"></div>
-  <div class="card w-full mt20" style="display:flex;flex-direction:column;gap:0">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
-      <span style="color:var(--muted);font-size:14px">החשוד היה</span>
-      <div style="display:flex;align-items:center;gap:8px"><span id="res-suspect" style="font-weight:700"></span><span class="badge badge-bad">חשוד</span></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
-      <span style="color:var(--muted);font-size:14px">השינוי בסצנה</span>
-      <span id="res-diff" style="font-weight:600;color:var(--warn);font-size:13px;text-align:left;max-width:60%"></span>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
-      <span style="color:var(--muted);font-size:14px">תוצאת הצבעה</span>
-      <span id="res-vote" style="font-weight:700"></span>
-    </div>
-  </div>
-  <div class="mt16 w-full">
-    <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">השוואת סצנות</div>
-    <div class="compare-wrap">
-      <div class="compare-item">
-        <div class="compare-label">סצנה מקורית</div>
-        <svg id="cmp-normal" viewBox="0 0 520 300" width="100%" height="120" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="lobby-actions">
+        <button class="btn btn-primary" id="btn-create">CREATE ROOM</button>
+        <div class="or-divider"><span>OR</span></div>
+        <div class="join-row">
+          <input id="room-input" class="room-input" type="text"
+                 placeholder="ROOM CODE" maxlength="6" autocomplete="off"/>
+          <button class="btn btn-secondary" id="btn-join">JOIN</button>
+        </div>
       </div>
-      <div class="compare-item">
-        <div class="compare-label">סצנת חשוד</div>
-        <svg id="cmp-suspect" viewBox="0 0 520 300" width="100%" height="120" xmlns="http://www.w3.org/2000/svg"></svg>
-      </div>
+
+      <div id="lobby-msg" class="lobby-msg"></div>
+    </div>
+
+    <div class="controls-hint">
+      <span>J JAB</span><span>K CROSS</span><span>L HOOK</span>
+      <span>A/D DODGE</span><span>SPACE BLOCK / PARRY</span>
     </div>
   </div>
-  <div style="display:flex;gap:10px;width:100%;margin-top:20px">
-    <button class="btn" onclick="playAgain()" style="flex:1">שחק שוב 🔄</button>
-    <button class="btn-ghost" onclick="goHome()" style="flex:1;width:auto">בית 🏠</button>
+</div>
+
+<!-- ══════════════ WAITING ROOM ══════════════ -->
+<div id="screen-waiting" class="screen">
+  <div class="waiting-content">
+    <div class="waiting-title">ROOM CODE</div>
+    <div id="room-code-display" class="room-code-big"></div>
+    <div class="waiting-sub">Share this code with your opponent</div>
+    <div id="waiting-status" class="waiting-status">
+      <span class="dot-pulse"></span> Waiting for opponent...
+    </div>
+    <button class="btn btn-ghost" id="btn-copy-code">COPY CODE</button>
   </div>
 </div>
 
+<!-- ══════════════ GAME ══════════════ -->
+<div id="screen-game" class="screen">
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="fighter-hud left" id="hud-p1">
+      <div class="fighter-name" id="hud-p1-name">PLAYER 1</div>
+      <div class="hp-track"><div class="hp-bar" id="p1-hp-bar"></div></div>
+      <div class="bar-label">HP</div>
+      <div class="stam-track"><div class="stam-bar" id="p1-stam-bar"></div></div>
+      <div class="bar-label">STAMINA</div>
+    </div>
+
+    <div id="center-hud">
+      <div id="round-display">RND 1</div>
+      <div id="timer-display">60</div>
+    </div>
+
+    <div class="fighter-hud right" id="hud-p2">
+      <div class="fighter-name" id="hud-p2-name">PLAYER 2</div>
+      <div class="hp-track"><div class="hp-bar" id="p2-hp-bar"></div></div>
+      <div class="bar-label">HP</div>
+      <div class="stam-track"><div class="stam-bar" id="p2-stam-bar"></div></div>
+      <div class="bar-label">STAMINA</div>
+    </div>
+  </div>
+
+  <!-- Arena -->
+  <div id="arena">
+    <div id="spotlight"></div>
+    <canvas id="ring-canvas"></canvas>
+    <div id="ring-floor"></div>
+
+    <!-- Fighters -->
+    <div class="fighter-container" id="p1-container">
+      <svg class="fighter-svg" viewBox="0 0 90 140">
+        <g fill="#c8d4f0" opacity="0.92">
+          <ellipse cx="45" cy="16" rx="12" ry="13"/>
+          <rect x="41" y="27" width="8" height="7" rx="2"/>
+          <rect x="30" y="33" width="30" height="34" rx="6"/>
+          <rect x="18" y="33" width="13" height="36" rx="5" id="p1-larm"/>
+          <rect x="59" y="33" width="13" height="36" rx="5" id="p1-rarm"/>
+          <ellipse cx="24" cy="71" rx="9" ry="7" fill="#e8f04a"/>
+          <ellipse cx="65" cy="71" rx="9" ry="7" fill="#e8f04a"/>
+          <rect x="29" y="64" width="32" height="22" rx="4" fill="#2244aa" opacity="0.85"/>
+          <rect x="30" y="83" width="13" height="38" rx="5"/>
+          <rect x="47" y="83" width="13" height="38" rx="5"/>
+          <rect x="27" y="116" width="18" height="10" rx="4" fill="#111122"/>
+          <rect x="44" y="116" width="18" height="10" rx="4" fill="#111122"/>
+        </g>
+        <ellipse cx="40" cy="15" rx="3" ry="3.5" fill="#0a0a0f" opacity="0.7"/>
+        <ellipse cx="50" cy="15" rx="3" ry="3.5" fill="#0a0a0f" opacity="0.7"/>
+        <ellipse id="p1-guard-vis" cx="45" cy="58" rx="20" ry="22"
+                 fill="#4af0b0" opacity="0" stroke="#4af0b0" stroke-width="2"/>
+      </svg>
+      <div class="fighter-shadow"></div>
+    </div>
+
+    <div class="fighter-container" id="p2-container">
+      <svg class="fighter-svg" viewBox="0 0 90 140" style="transform:scaleX(-1)">
+        <g fill="#f0c8c8" opacity="0.92">
+          <ellipse cx="45" cy="16" rx="12" ry="13"/>
+          <rect x="41" y="27" width="8" height="7" rx="2"/>
+          <rect x="30" y="33" width="30" height="34" rx="6"/>
+          <rect x="18" y="33" width="13" height="36" rx="5"/>
+          <rect x="59" y="33" width="13" height="36" rx="5"/>
+          <ellipse cx="24" cy="71" rx="9" ry="7" fill="#f04a4a"/>
+          <ellipse cx="65" cy="71" rx="9" ry="7" fill="#f04a4a"/>
+          <rect x="29" y="64" width="32" height="22" rx="4" fill="#8b1a1a" opacity="0.85"/>
+          <rect x="30" y="83" width="13" height="38" rx="5"/>
+          <rect x="47" y="83" width="13" height="38" rx="5"/>
+          <rect x="27" y="116" width="18" height="10" rx="4" fill="#1a0808"/>
+          <rect x="44" y="116" width="18" height="10" rx="4" fill="#1a0808"/>
+        </g>
+        <ellipse cx="40" cy="15" rx="3" ry="3.5" fill="#0a0a0f" opacity="0.7"/>
+        <ellipse cx="50" cy="15" rx="3" ry="3.5" fill="#0a0a0f" opacity="0.7"/>
+        <ellipse id="p2-guard-vis" cx="45" cy="58" rx="20" ry="22"
+                 fill="#4af0b0" opacity="0" stroke="#4af0b0" stroke-width="2"/>
+      </svg>
+      <div class="fighter-shadow"></div>
+    </div>
+
+    <!-- FX layers -->
+    <div class="hit-flash" id="hit-flash-l"></div>
+    <div class="hit-flash" id="hit-flash-r"></div>
+    <div id="combo-display"></div>
+    <div id="status-line"></div>
+    <div id="ping-display">-- ms</div>
+  </div>
+
+  <!-- Mobile / on-screen controls -->
+  <div id="controls-panel">
+    <div class="ctrl-group">
+      <span class="ctrl-label">MOVE</span>
+      <button class="ctrl-key" data-key="a">A</button>
+      <button class="ctrl-key" data-key="d">D</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">JAB</span>
+      <button class="ctrl-key" data-key="j">J</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">CROSS</span>
+      <button class="ctrl-key" data-key="k">K</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">HOOK</span>
+      <button class="ctrl-key" data-key="l">L</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">BLOCK</span>
+      <button class="ctrl-key wide" data-key=" "
+              onmousedown="game.handleKeyDown(' ')"
+              onmouseup="game.handleKeyUp(' ')"
+              ontouchstart="game.handleKeyDown(' ')"
+              ontouchend="game.handleKeyUp(' ')">BLOCK</button>
+    </div>
+  </div>
 </div>
 
-<script>
-/* ─── FIREBASE ─── */
-firebase.initializeApp({
-  apiKey:"AIzaSyA-gi3EIwLFcNS6MN6RGqs3L5UQsxTAbzk",
-  authDomain:"ghost-a424e.firebaseapp.com",
-  databaseURL:"https://ghost-a424e-default-rtdb.firebaseio.com",
-  projectId:"ghost-a424e",
-  storageBucket:"ghost-a424e.firebasestorage.app",
-  messagingSenderId:"449116961300",
-  appId:"1:449116961300:web:e3b20392eb17101e4cc501"
-});
-const db=firebase.database();
+<!-- ══════════════ RESULT ══════════════ -->
+<div id="screen-result" class="screen">
+  <div class="result-content">
+    <div id="result-title" class="result-title"></div>
+    <div id="result-sub" class="result-sub"></div>
+    <div id="result-stats" class="result-stats"></div>
+    <button class="btn btn-primary" id="btn-rematch">REMATCH</button>
+    <button class="btn btn-ghost" id="btn-lobby">BACK TO LOBBY</button>
+  </div>
+</div>
 
-/* ─── STARS ─── */
-(()=>{const c=document.getElementById('stars');for(let i=0;i<80;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+1,dur=(Math.random()*3+2).toFixed(1)+'s',delay='-'+(Math.random()*5).toFixed(1)+'s',op=(Math.random()*.5+.2).toFixed(2);s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${dur};--delay:${delay};--op:${op}`;c.appendChild(s);}})();
-
-/* ─── HELPERS ─── */
-const AV=['#6c47ff','#f472b6','#10b981','#f59e0b','#38bdf8','#fb923c','#a78bfa','#4ade80'];
-const uid=()=>Math.random().toString(36).slice(2,10);
-const rand=a=>a[Math.floor(Math.random()*a.length)];
-const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const genCode=()=>String(randInt(1000,9999));
-function avHtml(name,idx,size='md'){const c=AV[idx%AV.length];return `<div class="av av-${size}" style="background:${c}22;color:${c}">${name.charAt(0).toUpperCase()}</div>`;}
-function notify(msg,dur=2800){const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');clearTimeout(notify._t);notify._t=setTimeout(()=>n.classList.remove('show'),dur);}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');}
-
-/* ─── GAME DATA ─── */
-const SCENE={
-  objects:[
-    {id:'ball',   label:'כדור',  variants:[{k:'red',l:'אדום'},{k:'blue',l:'כחול'},{k:'green',l:'ירוק'},{k:'yellow',l:'צהוב'}]},
-    {id:'window', label:'חלון',  variants:[{k:'open',l:'פתוח'},{k:'closed',l:'סגור'}]},
-    {id:'lamp',   label:'מנורה', variants:[{k:'on',l:'דלוקה'},{k:'off',l:'כבויה'}]},
-    {id:'dog',    label:'כלב',   variants:[{k:'present',l:'נוכח'},{k:'absent',l:'נעדר'}]},
-    {id:'painting',label:'תמונה',variants:[{k:'flower',l:'פרח'},{k:'mountain',l:'הר'},{k:'sea',l:'ים'}]}
-  ],
-  questions:[
-    {obj:'ball',    text:'מה צבע הכדור?',       opts:['אדום','כחול','ירוק','צהוב']},
-    {obj:'window',  text:'האם החלון היה פתוח?', opts:['פתוח','סגור','לא היה חלון','לא זכור']},
-    {obj:'lamp',    text:'מה מצב המנורה?',       opts:['דלוקה','כבויה','לא הייתה','לא זכור']},
-    {obj:'dog',     text:'האם היה כלב בחדר?',    opts:['כן','לא','אולי','לא בטוח']},
-    {obj:'painting',text:'מה הייתה בתמונה?',     opts:['פרח','הר','ים','לא הייתה']}
-  ]
-};
-const OBJLBL={ball:'הכדור',window:'החלון',lamp:'המנורה',dog:'הכלב',painting:'התמונה'};
-
-/* ─── STATE ─── */
-let G={code:'',myId:'',myName:'',myIdx:0,isHost:false,players:[],normalVars:{},suspectVars:{},myVars:{},suspectId:'',diffObj:'',pendingAnswers:{},myVote:'',allAnswers:{},discT:null,sceneT:null,roleT:null,unsubs:[]};
-const roomRef=()=>db.ref('rooms/'+G.code);
-function rSet(p,v){return roomRef().child(p).set(v);}
-function unsub(){G.unsubs.forEach(f=>f());G.unsubs=[];}
-function listenOnce(path,cb){
-  const ref=roomRef().child(path);
-  const fn=snap=>cb(snap);
-  ref.on('value',fn);
-  G.unsubs.push(()=>ref.off('value',fn));
-}
-
-/* ─── CREATE ROOM ─── */
-async function createRoom(){
-  const name=document.getElementById('inp-name').value.trim();
-  if(!name){notify('הכנס שם תחילה 👆');return;}
-  G.myId=uid();G.myName=name;G.myIdx=0;G.isHost=true;G.code=genCode();
-  const me={id:G.myId,name,color:AV[0],ready:false,idx:0,isBot:false};
-  await db.ref('rooms/'+G.code).set({code:G.code,host:G.myId,phase:'lobby',players:{[G.myId]:me}});
-  enterLobby();
-}
-
-/* ─── JOIN ROOM ─── */
-async function joinRoom(){
-  const name=document.getElementById('inp-name').value.trim();
-  const code=document.getElementById('inp-code').value.trim();
-  if(!name){notify('הכנס שם תחילה 👆');return;}
-  if(code.length<4){notify('קוד לא תקין');return;}
-  G.myId=uid();G.myName=name;G.code=code;G.isHost=false;
-  const snap=await db.ref('rooms/'+code).once('value');
-  if(!snap.exists()){notify('❌ חדר לא קיים — בדוק את הקוד');return;}
-  const data=snap.val();
-  if(data.phase!=='lobby'){notify('❌ המשחק כבר התחיל');return;}
-  const existing=data.players?Object.values(data.players):[];
-  if(existing.length>=8){notify('❌ החדר מלא');return;}
-  G.myIdx=existing.length;
-  const me={id:G.myId,name,color:AV[G.myIdx%AV.length],ready:false,idx:G.myIdx,isBot:false};
-  await db.ref('rooms/'+code+'/players/'+G.myId).set(me);
-  notify('הצטרפת! 🎮');
-  enterLobby();
-}
-
-/* ─── LOBBY ─── */
-function enterLobby(){
-  show('lobby');
-  document.getElementById('disp-code').textContent=G.code;
-  document.getElementById('host-start').style.display=G.isHost?'block':'none';
-  document.getElementById('guest-wait').style.display=G.isHost?'none':'block';
-
-  // Watch players
-  const pRef=roomRef().child('players');
-  const pFn=snap=>{const d=snap.val()||{};G.players=Object.values(d).sort((a,b)=>a.idx-b.idx);document.getElementById('disp-pcount').textContent=G.players.length;renderLobby();if(G.isHost)document.getElementById('start-btn').disabled=G.players.length<2;};
-  pRef.on('value',pFn);G.unsubs.push(()=>pRef.off('value',pFn));
-
-  // Watch phase (to kick everyone into game)
-  const phRef=roomRef().child('phase');
-  const phFn=snap=>{if(snap.val()&&snap.val()!=='lobby'){phRef.off('value',phFn);G.unsubs=G.unsubs.filter(f=>f!=(()=>phRef.off('value',phFn)));startRound();}};
-  phRef.on('value',phFn);G.unsubs.push(()=>phRef.off('value',phFn));
-}
-
-function renderLobby(){
-  const el=document.getElementById('lobby-list');el.innerHTML='';
-  G.players.forEach((p,i)=>{
-    const ready=p.ready||p.isBot;
-    const div=document.createElement('div');div.className='player-chip'+(ready?' ready':'');
-    div.innerHTML=`${avHtml(p.name,p.idx!=null?p.idx:i)}<span style="font-weight:600">${p.name}</span>${(p.idx===0)?'<span class="badge badge-accent" style="font-size:11px">מארח</span>':''}${p.isBot?'<span style="font-size:11px;color:var(--muted)">🤖</span>':''}<div style="margin-right:auto;width:8px;height:8px;border-radius:50%;background:${ready?'var(--ok)':'var(--warn)'}"></div>`;
-    el.appendChild(div);
-  });
-}
-
-function copyCode(){navigator.clipboard?.writeText(G.code).then(()=>notify('קוד הועתק! 📋 שלח לחברים')).catch(()=>notify('קוד: '+G.code));}
-
-async function toggleReady(){
-  const p=G.players.find(x=>x.id===G.myId);if(!p)return;
-  const nr=!p.ready;
-  await db.ref('rooms/'+G.code+'/players/'+G.myId+'/ready').set(nr);
-  const btn=document.getElementById('ready-btn');
-  btn.textContent=nr?'✓ מוכן (לחץ לביטול)':'✓ מוכן';
-  btn.style.borderColor=nr?'var(--ok)':'';btn.style.color=nr?'var(--ok)':'';
-}
-
-async function leaveRoom(){
-  unsub();clearTimers();
-  try{await db.ref('rooms/'+G.code+'/players/'+G.myId).remove();}catch(e){}
-  resetG();show('home');
-}
-
-/* ─── HOST START ─── */
-async function hostStart(){
-  if(G.players.length<2){notify('צריך לפחות 2 שחקנים');return;}
-  // Build scene
-  const nv={};SCENE.objects.forEach(o=>{nv[o.id]=rand(o.variants).k;});
-  const suspect=rand(G.players);
-  const dObj=rand(SCENE.objects.filter(o=>o.variants.length>1));
-  const nVal=nv[dObj.id];
-  const sv={...nv,[dObj.id]:rand(dObj.variants.filter(v=>v.k!==nVal)).k};
-  await rSet('round',{normalVars:nv,suspectVars:sv,suspectId:suspect.id,diffObj:dObj.id,answers:{},votes:{},chat:{}});
-  await rSet('phase','scene');
-}
-
-/* ─── START ROUND (all players) ─── */
-async function startRound(){
-  unsub();clearTimers();
-  const snap=await roomRef().once('value');
-  const data=snap.val();if(!data)return;
-  G.players=Object.values(data.players||{}).sort((a,b)=>a.idx-b.idx);
-  const r=data.round||{};
-  G.normalVars=r.normalVars||{};G.suspectVars=r.suspectVars||{};
-  G.suspectId=r.suspectId||'';G.diffObj=r.diffObj||'';
-  G.myVars=G.myId===G.suspectId?G.suspectVars:G.normalVars;
-  G.pendingAnswers={};G.myVote='';G.allAnswers={};
-  showRoleReveal(G.myId===G.suspectId,()=>showScene());
-}
-
-/* ─── ROLE REVEAL ─── */
-function showRoleReveal(isSuspect,cb){
-  show('role');
-  const badge=document.getElementById('role-badge'),icon=document.getElementById('role-icon'),title=document.getElementById('role-title'),desc=document.getElementById('role-desc');
-  if(isSuspect){badge.className='badge badge-bad';badge.textContent='חשוד!';icon.textContent='🕵️';title.textContent='אתה החשוד!';desc.innerHTML='אתה רואה גרסה שונה של הסצנה.<br>נסה לא להיתפס! 😈';}
-  else{badge.className='badge badge-ok';badge.textContent='שחקן רגיל';icon.textContent='🙂';title.textContent='שחקן רגיל';desc.innerHTML='אתה רואה את הסצנה המקורית.<br>שים לב לכל פרט! 👁️';}
-  let c=3;document.getElementById('role-cd').textContent=c;
-  clearInterval(G.roleT);
-  G.roleT=setInterval(()=>{c--;if(c<=0){clearInterval(G.roleT);cb();}else document.getElementById('role-cd').textContent=c;},1000);
-}
-
-/* ─── SCENE ─── */
-function showScene(){
-  show('scene');
-  const is=G.myId===G.suspectId;
-  document.getElementById('scene-wrap').className='scene-wrap'+(is?' suspect-glow':'');
-  document.getElementById('scene-hint').textContent=is?'⚠️ זוהי הסצנה שלך — אחרים אולי ראו משהו שונה...':'👁️ זכור כל פרט — תישאל עליהם...';
-  drawScene(document.getElementById('scene-svg'),G.myVars);
-  startTimer('scene-td','scene-tc',10,176,()=>showQuestions());
-}
-
-/* ─── SCENE RENDERER ─── */
-function mk(tag,a){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));return e;}
-function mkT(t,x,y,a){const e=document.createElementNS('http://www.w3.org/2000/svg','text');e.textContent=t;e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('font-family','Rubik,sans-serif');Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));return e;}
-function drawScene(svg,v){
-  svg.innerHTML='';
-  svg.append(mk('rect',{x:0,y:0,width:520,height:300,fill:'#10102a'}),mk('rect',{x:0,y:195,width:520,height:105,fill:'#0b0b1e'}),mk('line',{x1:0,y1:196,x2:520,y2:196,stroke:'#1e1e40','stroke-width':2}),mk('rect',{x:0,y:0,width:520,height:4,fill:'rgba(108,71,255,0.15)'}));
-  // Window
-  const wo=v.window==='open';
-  svg.append(mk('rect',{x:55,y:35,width:100,height:80,rx:4,fill:wo?'#0d2a4a':'#090918',stroke:'#2a2a60','stroke-width':1.5}),mk('line',{x1:55,y1:75,x2:155,y2:75,stroke:'#2a2a60','stroke-width':1.5}),mk('line',{x1:105,y1:35,x2:105,y2:115,stroke:'#2a2a60','stroke-width':1.5}),mk('rect',{x:53,y:33,width:104,height:84,rx:5,fill:'none',stroke:'#3a3a70','stroke-width':2.5}));
-  if(wo)svg.append(mk('rect',{x:57,y:37,width:96,height:36,rx:2,fill:'rgba(56,189,248,.08)'}));
-  svg.append(mkT(wo?'פתוח':'סגור',105,130,{'font-size':'11','fill':wo?'#38bdf8':'#4a5a8a','text-anchor':'middle'}));
-  // Painting
-  svg.append(mk('rect',{x:195,y:30,width:90,height:70,rx:4,fill:'#0f0f28',stroke:'#4a4a80','stroke-width':2.5}));
-  if(v.painting==='flower'){svg.append(mk('line',{x1:240,y1:88,x2:240,y2:70,stroke:'#16a34a','stroke-width':2}),mk('circle',{cx:240,cy:62,r:10,fill:'#f472b6',opacity:.85}),mk('circle',{cx:232,cy:56,r:7,fill:'#fb7185',opacity:.7}),mk('circle',{cx:248,cy:56,r:7,fill:'#c084fc',opacity:.7}),mk('circle',{cx:240,cy:62,r:4,fill:'#fbbf24'}));}
-  else if(v.painting==='mountain'){svg.append(mk('rect',{x:197,y:32,width:86,height:66,rx:3,fill:'#0d1a2e'}),mk('polygon',{points:'240,38 210,96 270,96',fill:'#60a5fa',opacity:.7}),mk('polygon',{points:'225,52 202,96 248,96',fill:'#93c5fd',opacity:.5}),mk('polygon',{points:'240,38 228,55 252,55',fill:'white',opacity:.6}));}
-  else{svg.append(mk('rect',{x:197,y:32,width:86,height:66,rx:3,fill:'#0a1a30'}),mk('path',{d:'M200 58 Q215 52 228 58 Q241 64 255 58 Q268 52 282 58',fill:'none',stroke:'#38bdf8','stroke-width':2,opacity:.6}),mk('path',{d:'M200 72 Q215 66 228 72 Q241 78 255 72 Q268 66 282 72',fill:'none',stroke:'#60a5fa','stroke-width':1.5,opacity:.5}),mk('circle',{cx:270,cy:44,r:8,fill:'#fbbf24',opacity:.8}));}
-  // Lamp
-  const lo=v.lamp==='on';
-  svg.append(mk('line',{x1:390,y1:0,x2:390,y2:50,stroke:'#4a4a80','stroke-width':2.5}),mk('ellipse',{cx:390,cy:65,rx:32,ry:16,fill:lo?'#fbbf24':'#1e1e40',stroke:lo?'#f59e0b':'#2a2a60','stroke-width':2}),mk('ellipse',{cx:390,cy:62,rx:26,ry:10,fill:lo?'rgba(251,191,36,.35)':'rgba(30,30,64,.4)'}));
-  if(lo)svg.append(mk('ellipse',{cx:390,cy:80,rx:50,ry:12,fill:'rgba(251,191,36,.07)'}));
-  svg.append(mkT(lo?'דלוקה':'כבויה',390,165,{'font-size':'11','fill':lo?'#fbbf24':'#6b6897','text-anchor':'middle'}));
-  // Couch
-  svg.append(mk('rect',{x:80,y:200,width:280,height:70,rx:12,fill:'#1e1e42',stroke:'#2e2e60','stroke-width':1.5}),mk('rect',{x:88,y:188,width:264,height:28,rx:10,fill:'#28285a',stroke:'#3a3a70','stroke-width':1.5}),mk('rect',{x:80,y:206,width:28,height:64,rx:8,fill:'#28285a'}),mk('rect',{x:332,y:206,width:28,height:64,rx:8,fill:'#28285a'}));
-  // Dog
-  if(v.dog==='present'){svg.append(mk('ellipse',{cx:155,cy:272,rx:28,ry:16,fill:'#92400e'}),mk('path',{d:'M128,270 Q110,250 118,240',fill:'none',stroke:'#92400e','stroke-width':5,'stroke-linecap':'round'}),mk('circle',{cx:175,cy:258,r:14,fill:'#92400e'}),mk('ellipse',{cx:163,cy:248,rx:6,ry:9,fill:'#78350f',transform:'rotate(-20 163 248)'}),mk('ellipse',{cx:183,cy:248,rx:6,ry:9,fill:'#78350f',transform:'rotate(20 183 248)'}),mk('ellipse',{cx:181,cy:264,rx:6,ry:5,fill:'#78350f'}),mk('circle',{cx:170,cy:256,r:2.5,fill:'#1c1c1c'}),mk('circle',{cx:179,cy:256,r:2.5,fill:'#1c1c1c'}),mkT('כלב',155,295,{'font-size':'11','fill':'#a16207','text-anchor':'middle'}));}
-  // Ball
-  const BC={red:'#ef4444',blue:'#3b82f6',green:'#22c55e',yellow:'#eab308'},BC2={red:'#dc2626',blue:'#2563eb',green:'#16a34a',yellow:'#ca8a04'};
-  const bc=BC[v.ball]||'#ef4444',bc2=BC2[v.ball]||'#dc2626';
-  svg.append(mk('ellipse',{cx:270,cy:292,rx:20,ry:5,fill:'rgba(0,0,0,.4)'}),mk('circle',{cx:270,cy:278,r:20,fill:bc,stroke:bc2,'stroke-width':1.5}),mk('circle',{cx:263,cy:271,r:5,fill:'white',opacity:.35}),mk('path',{d:'M255 270 Q270 262 285 270',fill:'none',stroke:bc2,'stroke-width':1,opacity:.5}),mkT(({red:'אדום',blue:'כחול',green:'ירוק',yellow:'צהוב'})[v.ball]||'',270,308,{'font-size':'11','fill':bc,'text-anchor':'middle','font-weight':'600'}));
-}
-
-/* ─── TIMER ─── */
-function startTimer(dId,cId,sec,circ,cb){
-  const d=document.getElementById(dId),c=document.getElementById(cId);
-  let rem=sec;d.textContent=rem;c.style.strokeDashoffset=0;
-  clearInterval(G.sceneT);
-  G.sceneT=setInterval(()=>{rem--;d.textContent=rem;c.style.strokeDashoffset=circ*(sec-rem)/sec;if(rem<=0){clearInterval(G.sceneT);cb();}},1000);
-}
-
-/* ─── QUESTIONS ─── */
-function showQuestions(){
-  show('questions');G.pendingAnswers={};
-  const qs=SCENE.questions.slice(0,3);
-  document.getElementById('q-tot').textContent=qs.length;document.getElementById('q-n').textContent='0';
-  document.getElementById('submit-q').style.display='none';document.getElementById('q-wait').style.display='none';
-  const cont=document.getElementById('q-container');cont.innerHTML='';
-  qs.forEach((q,qi)=>{
-    const card=document.createElement('div');card.className='q-card';
-    card.innerHTML=`<div class="q-text">${qi+1}. ${q.text}</div><div class="opts">${q.opts.map((o,oi)=>`<button class="opt" onclick="pickOpt(${qi},${oi},this)">${o}</button>`).join('')}</div>`;
-    cont.appendChild(card);
-  });
-}
-function pickOpt(qi,oi,btn){
-  btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');G.pendingAnswers[qi]=btn.textContent;
-  document.getElementById('q-n').textContent=Object.keys(G.pendingAnswers).length;
-  if(Object.keys(G.pendingAnswers).length>=3)document.getElementById('submit-q').style.display='block';
-}
-async function submitAnswers(){
-  document.getElementById('submit-q').style.display='none';document.getElementById('q-wait').style.display='flex';
-  await db.ref('rooms/'+G.code+'/round/answers/'+G.myId).set(G.pendingAnswers);
-  // Watch answers count
-  const aRef=db.ref('rooms/'+G.code+'/round/answers');
-  const aFn=snap=>{
-    const ans=snap.val()||{};const cnt=Object.keys(ans).length;const tot=G.players.length;
-    document.getElementById('q-wait-prog').style.width=Math.round(cnt/tot*100)+'%';
-    document.getElementById('q-wait-text').textContent=`ממתין... (${cnt}/${tot})`;
-    if(cnt>=tot){aRef.off('value',aFn);G.allAnswers=ans;if(G.isHost)rSet('phase','discussion').catch(()=>{});showDiscussion(ans);}
-  };
-  aRef.on('value',aFn);G.unsubs.push(()=>aRef.off('value',aFn));
-}
-
-/* ─── DISCUSSION ─── */
-function showDiscussion(answers){
-  clearInterval(G.sceneT);show('discussion');
-  renderAnswerSummary(answers);
-  document.getElementById('chat-box').innerHTML='';
-  // Listen chat
-  const chatRef=db.ref('rooms/'+G.code+'/round/chat');
-  const chatFn=snap=>{const m=snap.val();if(m)addChatMsg(m.name,m.color,m.text);};
-  chatRef.on('child_added',chatFn);G.unsubs.push(()=>chatRef.off('child_added',chatFn));
-  // Listen phase → voting
-  const phRef=db.ref('rooms/'+G.code+'/phase');
-  const phFn=snap=>{if(snap.val()==='voting'){phRef.off('value',phFn);clearInterval(G.discT);showVoting();}};
-  phRef.on('value',phFn);G.unsubs.push(()=>phRef.off('value',phFn));
-  // Timer (host triggers phase change, guest just shows countdown)
-  let rem=40;
-  const d=document.getElementById('disc-td'),c=document.getElementById('disc-tc');
-  d.textContent=rem;c.style.strokeDashoffset=0;
-  clearInterval(G.discT);
-  G.discT=setInterval(()=>{rem--;d.textContent=rem;c.style.strokeDashoffset=138*(40-rem)/40;if(rem<=0){clearInterval(G.discT);if(G.isHost)rSet('phase','voting').catch(()=>{});}},1000);
-}
-function renderAnswerSummary(answers){
-  const el=document.getElementById('ans-summary');el.innerHTML='';
-  SCENE.questions.slice(0,3).forEach((q,qi)=>{
-    const counts={};G.players.forEach(p=>{const a=(answers[p.id]||{})[qi];if(a)counts[a]=(counts[a]||0)+1;});
-    const unique=Object.keys(counts).length;
-    const row=document.createElement('div');row.className='ans-row';
-    row.innerHTML=`<div style="font-size:12px;color:var(--muted);margin-bottom:4px">${q.text}</div><div class="ans-chips">${Object.entries(counts).map(([a,c])=>`<span class="ans-chip ${c===G.players.length?'agree':unique>1?'conflict':''}">${a}: ${c}</span>`).join('')}</div>`;
-    el.appendChild(row);
-  });
-}
-function addChatMsg(name,color,text){
-  const box=document.getElementById('chat-box');
-  const div=document.createElement('div');div.className='chat-msg';
-  div.innerHTML=`<span class="who" style="color:${color}">${name}:</span>${text}`;
-  box.appendChild(div);box.scrollTop=box.scrollHeight;
-}
-async function sendChat(){
-  const inp=document.getElementById('chat-inp');const text=inp.value.trim();if(!text)return;inp.value='';
-  const me=G.players.find(p=>p.id===G.myId);
-  await db.ref('rooms/'+G.code+'/round/chat').push({name:G.myName,color:me?.color||AV[0],text,ts:Date.now()});
-}
-
-/* ─── VOTING ─── */
-function showVoting(){
-  clearInterval(G.discT);show('voting');G.myVote='';
-  document.getElementById('vote-confirm').style.display='none';document.getElementById('vote-wait').style.display='none';
-  const grid=document.getElementById('vote-grid');grid.innerHTML='';
-  G.players.forEach((p,i)=>{
-    if(p.id===G.myId)return;
-    const card=document.createElement('div');card.className='v-card';card.id='vc-'+p.id;
-    card.innerHTML=`${avHtml(p.name,p.idx!=null?p.idx:i)}<span style="font-weight:600">${p.name}</span><span class="v-count" id="vcount-${p.id}" style="display:none">0</span>`;
-    card.onclick=()=>{document.querySelectorAll('.v-card').forEach(c=>c.classList.remove('sel'));card.classList.add('sel');G.myVote=p.id;document.getElementById('vote-confirm').style.display='block';};
-    grid.appendChild(card);
-  });
-}
-async function confirmVote(){
-  if(!G.myVote)return;
-  document.getElementById('vote-confirm').style.display='none';document.getElementById('vote-wait').style.display='flex';
-  await db.ref('rooms/'+G.code+'/round/votes/'+G.myId).set(G.myVote);
-  const vRef=db.ref('rooms/'+G.code+'/round/votes');
-  const vFn=snap=>{
-    const votes=snap.val()||{};const cnt=Object.keys(votes).length;const tot=G.players.length;
-    document.getElementById('vote-wait-prog').style.width=Math.round(cnt/tot*100)+'%';
-    const counts={};Object.values(votes).forEach(v=>{counts[v]=(counts[v]||0)+1;});
-    Object.entries(counts).forEach(([id,n])=>{const el=document.getElementById('vcount-'+id);if(el){el.style.display='inline';el.textContent=n;}});
-    if(cnt>=tot){vRef.off('value',vFn);if(G.isHost)rSet('phase','result').catch(()=>{});showResult(votes);}
-  };
-  vRef.on('value',vFn);G.unsubs.push(()=>vRef.off('value',vFn));
-}
-
-/* ─── RESULT ─── */
-function showResult(votes){
-  const counts={};Object.values(votes).forEach(v=>{counts[v]=(counts[v]||0)+1;});
-  let maxV=0,mostVoted='';Object.entries(counts).forEach(([id,n])=>{if(n>maxV){maxV=n;mostVoted=id;}});
-  const caught=mostVoted===G.suspectId;
-  const sp=G.players.find(p=>p.id===G.suspectId),mvp=G.players.find(p=>p.id===mostVoted);
-  const dObj=SCENE.objects.find(o=>o.id===G.diffObj);
-  const nL=dObj?.variants.find(v=>v.k===G.normalVars[G.diffObj])?.l||'';
-  const sL=dObj?.variants.find(v=>v.k===G.suspectVars[G.diffObj])?.l||'';
-  show('result');
-  document.getElementById('res-icon').textContent=caught?'🎉':'😈';
-  document.getElementById('res-title').textContent=caught?'הקבוצה ניצחה!':'החשוד ניצח!';
-  document.getElementById('res-sub').textContent=caught?`כל הכבוד! זיהיתם את ${sp?.name||'?'}`:`${sp?.name||'?'} הצליח להסתתר!`;
-  document.getElementById('res-suspect').textContent=sp?.name||'?';
-  document.getElementById('res-diff').textContent=`${OBJLBL[G.diffObj]||G.diffObj}: ${nL} → ${sL}`;
-  document.getElementById('res-vote').innerHTML=caught?`<span style="color:var(--ok)">נכון ✓</span>`:`<span style="color:var(--bad)">טעות — ${mvp?.name||'?'} ✗</span>`;
-  drawScene(document.getElementById('cmp-normal'),G.normalVars);
-  drawScene(document.getElementById('cmp-suspect'),G.suspectVars);
-}
-
-/* ─── PLAY AGAIN / HOME ─── */
-async function playAgain(){
-  unsub();clearTimers();
-  if(G.isHost){await rSet('phase','lobby');await rSet('round',null);enterLobby();}
-  else{show('lobby');renderLobby();const phRef=roomRef().child('phase');const phFn=snap=>{if(snap.val()&&snap.val()!=='lobby'){phRef.off('value',phFn);startRound();}};phRef.on('value',phFn);G.unsubs.push(()=>phRef.off('value',phFn));notify('ממתין לבעל החדר...');}
-}
-function goHome(){unsub();clearTimers();resetG();show('home');}
-function clearTimers(){clearInterval(G.discT);clearInterval(G.sceneT);clearInterval(G.roleT);}
-function resetG(){G={code:'',myId:'',myName:'',myIdx:0,isHost:false,players:[],normalVars:{},suspectVars:{},myVars:{},suspectId:'',diffObj:'',pendingAnswers:{},myVote:'',allAnswers:{},discT:null,sceneT:null,roleT:null,unsubs:[]};}
-</script>
+<!-- Firebase SDK -->
+<script type="module" src="firebase.js"></script>
 </body>
 </html>
