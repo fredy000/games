@@ -1,163 +1,315 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-<meta charset="UTF-8">
-<title>Blob Wars Online</title>
-<style>
-body{margin:0;background:#0d0d1a;color:white;text-align:center;font-family:sans-serif}
-canvas{background:#111;border:2px solid white;margin-top:20px}
-button{margin:5px;padding:10px;border-radius:10px;border:none;cursor:pointer}
-#ui{margin-top:10px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blob Wars Firebase</title>
+  <style>
+    body{
+      margin:0;
+      background:#0d0d1a;
+      color:#fff;
+      font-family:Arial,sans-serif;
+      text-align:center;
+    }
+    h1{margin:20px 0 10px}
+    #topbar{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    button{
+      border:none;
+      border-radius:10px;
+      padding:10px 16px;
+      cursor:pointer;
+      font-size:15px;
+    }
+    #roomInfo,#status{
+      background:rgba(255,255,255,.08);
+      padding:8px 12px;
+      border-radius:10px;
+    }
+    canvas{
+      display:block;
+      margin:20px auto;
+      background:#111;
+      border:2px solid rgba(255,255,255,.18);
+      border-radius:12px;
+    }
+  </style>
 </head>
 <body>
+  <h1>💥 Blob Wars Online</h1>
 
-<h1>💥 Blob Wars Online</h1>
+  <div id="topbar">
+    <button id="createBtn">🎮 צור חדר</button>
+    <button id="joinBtn">🔑 הצטרף לחדר</button>
+    <div id="roomInfo">Room: -</div>
+    <div id="status">טוען...</div>
+  </div>
 
-<div id="ui">
-  <button onclick="createRoom()">🎮 צור חדר</button>
-  <button onclick="joinRoom()">🔑 הצטרף לחדר</button>
-  <div id="room">Room: -</div>
-</div>
+  <canvas id="game" width="800" height="400"></canvas>
 
-<canvas id="game" width="800" height="400"></canvas>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      set,
+      get,
+      update,
+      onValue,
+      onDisconnect
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-gi3EIwLFcNS6MN6RGqs3L5UQsxTAbzk",
+      authDomain: "ghost-a424e.firebaseapp.com",
+      databaseURL: "https://ghost-a424e-default-rtdb.firebaseio.com",
+      projectId: "ghost-a424e",
+      storageBucket: "ghost-a424e.firebasestorage.app",
+      messagingSenderId: "449116961300",
+      appId: "1:449116961300:web:e3b20392eb17101e4cc501"
+    };
 
-/* 🔥 FIREBASE שלך */
-const firebaseConfig = {
-  apiKey: "AIzaSyA-gi3EIwLFcNS6MN6RGqs3L5UQsxTAbzk",
-  authDomain: "ghost-a424e.firebaseapp.com",
-  databaseURL: "https://ghost-a424e-default-rtdb.firebaseio.com",
-  projectId: "ghost-a424e",
-  storageBucket: "ghost-a424e.firebasestorage.app",
-  messagingSenderId: "449116961300",
-  appId: "1:449116961300:web:e3b20392eb17101e4cc501"
-};
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const createBtn = document.getElementById("createBtn");
+    const joinBtn = document.getElementById("joinBtn");
+    const roomInfo = document.getElementById("roomInfo");
+    const statusEl = document.getElementById("status");
 
-/* 🎮 GAME */
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+    let roomId = null;
+    let role = null; // p1 / p2
+    let roomListenerAttached = false;
+    let isSyncing = false;
 
-let players = [
-  {x:100,y:200,color:"red"},
-  {x:600,y:200,color:"green"}
-];
+    const keys = {};
 
-let keys = {};
-document.addEventListener("keydown",e=>keys[e.key]=true);
-document.addEventListener("keyup",e=>keys[e.key]=false);
+    const players = [
+      { x: 100, y: 200, color: "#ff4757", speed: 3 },
+      { x: 600, y: 200, color: "#2ed573", speed: 3 }
+    ];
 
-function update(){
-  if(role==="p1"){
-    if(keys["a"]) players[0].x-=3;
-    if(keys["d"]) players[0].x+=3;
-    if(keys["w"]) players[0].y-=3;
-    if(keys["s"]) players[0].y+=3;
-  }
-  if(role==="p2"){
-    if(keys["ArrowLeft"]) players[1].x-=3;
-    if(keys["ArrowRight"]) players[1].x+=3;
-    if(keys["ArrowUp"]) players[1].y-=3;
-    if(keys["ArrowDown"]) players[1].y+=3;
-  }
-
-  sync();
-}
-
-function draw(){
-  ctx.clearRect(0,0,800,400);
-
-  players.forEach(p=>{
-    ctx.fillStyle=p.color;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,20,0,Math.PI*2);
-    ctx.fill();
-  });
-}
-
-function loop(){
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-loop();
-
-/* 🌐 MULTIPLAYER */
-let roomId=null;
-let role=null;
-
-function code(){
-  return Math.random().toString(36).slice(2,6).toUpperCase();
-}
-
-function updateUI(){
-  document.getElementById("room").innerText="Room: "+(roomId||"-");
-}
-
-window.createRoom = async ()=>{
-  roomId = code();
-  role = "p1";
-  updateUI();
-
-  await set(ref(db,"rooms/"+roomId),{
-    players:{
-      p1:{x:100,y:200},
-      p2:{x:600,y:200}
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+      console.log(msg);
     }
-  });
 
-  listen();
-  alert("קוד חדר: "+roomId);
-};
+    function setRoomInfo() {
+      roomInfo.textContent = "Room: " + (roomId || "-");
+    }
 
-window.joinRoom = async ()=>{
-  const id = prompt("קוד חדר:");
-  if(!id)return;
+    function generateRoomCode() {
+      return Math.random().toString(36).slice(2, 8).toUpperCase();
+    }
 
-  const snap = await get(ref(db,"rooms/"+id));
-  if(!snap.exists()){
-    alert("לא קיים");
-    return;
-  }
+    function getMyPlayer() {
+      if (role === "p1") return players[0];
+      if (role === "p2") return players[1];
+      return null;
+    }
 
-  roomId=id;
-  role="p2";
-  updateUI();
+    function getRemotePlayer() {
+      if (role === "p1") return players[1];
+      if (role === "p2") return players[0];
+      return null;
+    }
 
-  listen();
-};
+    function clampPlayer(p) {
+      p.x = Math.max(20, Math.min(canvas.width - 20, p.x));
+      p.y = Math.max(20, Math.min(canvas.height - 20, p.y));
+    }
 
-function listen(){
-  onValue(ref(db,"rooms/"+roomId),(snap)=>{
-    const data=snap.val();
-    if(!data)return;
+    function updateGame() {
+      const me = getMyPlayer();
+      if (!me) return;
 
-    players[0].x=data.players.p1.x;
-    players[0].y=data.players.p1.y;
+      if (role === "p1") {
+        if (keys["a"]) me.x -= me.speed;
+        if (keys["d"]) me.x += me.speed;
+        if (keys["w"]) me.y -= me.speed;
+        if (keys["s"]) me.y += me.speed;
+      }
 
-    players[1].x=data.players.p2.x;
-    players[1].y=data.players.p2.y;
-  });
-}
+      if (role === "p2") {
+        if (keys["ArrowLeft"]) me.x -= me.speed;
+        if (keys["ArrowRight"]) me.x += me.speed;
+        if (keys["ArrowUp"]) me.y -= me.speed;
+        if (keys["ArrowDown"]) me.y += me.speed;
+      }
 
-function sync(){
-  if(!roomId||!role)return;
+      clampPlayer(me);
+    }
 
-  const me = role==="p1"?players[0]:players[1];
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  update(ref(db,"rooms/"+roomId+"/players/"+role),{
-    x:me.x,
-    y:me.y
-  });
-}
+      for (const p of players) {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 20, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
 
-</script>
+    async function syncMyPlayer() {
+      if (!roomId || !role || isSyncing) return;
 
+      const me = getMyPlayer();
+      if (!me) return;
+
+      try {
+        await update(ref(db, `rooms/${roomId}/players/${role}`), {
+          x: me.x,
+          y: me.y,
+          connected: true,
+          updatedAt: Date.now()
+        });
+      } catch (err) {
+        console.error("syncMyPlayer error:", err);
+        setStatus("שגיאת סנכרון: " + err.message);
+      }
+    }
+
+    function attachRoomListener() {
+      if (!roomId || roomListenerAttached) return;
+      roomListenerAttached = true;
+
+      onValue(ref(db, `rooms/${roomId}`), (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          setStatus("החדר נמחק או לא קיים");
+          return;
+        }
+
+        isSyncing = true;
+
+        const remote = getRemotePlayer();
+
+        if (role === "p1" && data.players?.p2 && remote) {
+          remote.x = data.players.p2.x ?? remote.x;
+          remote.y = data.players.p2.y ?? remote.y;
+        }
+
+        if (role === "p2" && data.players?.p1 && remote) {
+          remote.x = data.players.p1.x ?? remote.x;
+          remote.y = data.players.p1.y ?? remote.y;
+        }
+
+        isSyncing = false;
+      }, (err) => {
+        console.error("onValue error:", err);
+        setStatus("שגיאת האזנה: " + err.message);
+      });
+    }
+
+    async function createRoom() {
+      try {
+        setStatus("יוצר חדר...");
+        roomId = generateRoomCode();
+        role = "p1";
+        setRoomInfo();
+
+        await set(ref(db, `rooms/${roomId}`), {
+          createdAt: Date.now(),
+          players: {
+            p1: {
+              x: players[0].x,
+              y: players[0].y,
+              connected: true
+            },
+            p2: {
+              x: players[1].x,
+              y: players[1].y,
+              connected: false
+            }
+          }
+        });
+
+        await onDisconnect(ref(db, `rooms/${roomId}/players/p1/connected`)).set(false);
+
+        attachRoomListener();
+        setStatus("החדר נוצר בהצלחה");
+        alert("קוד החדר: " + roomId);
+      } catch (err) {
+        console.error("createRoom error:", err);
+        setStatus("שגיאה ביצירת חדר: " + err.message);
+        alert("שגיאה ביצירת חדר:\n" + err.message);
+      }
+    }
+
+    async function joinRoom() {
+      try {
+        const code = prompt("הכניסי קוד חדר:");
+        if (!code) return;
+
+        const cleanCode = code.trim().toUpperCase();
+        setStatus("בודק חדר...");
+
+        const snapshot = await get(ref(db, `rooms/${cleanCode}`));
+        if (!snapshot.exists()) {
+          setStatus("החדר לא קיים");
+          alert("החדר לא קיים");
+          return;
+        }
+
+        const data = snapshot.val();
+        if (data.players?.p2?.connected) {
+          setStatus("החדר מלא");
+          alert("החדר מלא");
+          return;
+        }
+
+        roomId = cleanCode;
+        role = "p2";
+        setRoomInfo();
+
+        await update(ref(db, `rooms/${roomId}/players/p2`), {
+          x: players[1].x,
+          y: players[1].y,
+          connected: true,
+          updatedAt: Date.now()
+        });
+
+        await onDisconnect(ref(db, `rooms/${roomId}/players/p2/connected`)).set(false);
+
+        attachRoomListener();
+        setStatus("התחברת לחדר");
+      } catch (err) {
+        console.error("joinRoom error:", err);
+        setStatus("שגיאה בהצטרפות: " + err.message);
+        alert("שגיאה בהצטרפות:\n" + err.message);
+      }
+    }
+
+    function gameLoop() {
+      updateGame();
+      draw();
+      if (roomId && role) syncMyPlayer();
+      requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      keys[e.key] = true;
+    });
+
+    document.addEventListener("keyup", (e) => {
+      keys[e.key] = false;
+    });
+
+    createBtn.addEventListener("click", createRoom);
+    joinBtn.addEventListener("click", joinRoom);
+
+    setStatus("מוכן");
+    gameLoop();
+  </script>
 </body>
 </html>
